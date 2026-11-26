@@ -280,3 +280,8 @@ footer .small { color: var(--ink-soft); font-size: .8rem; margin: 0; font-family
   .project-dialog[open] { grid-template-columns: 1fr; }
   .dlg-body { padding: 4px 22px 24px; }
 }
+
+/* Keep the page behind still while a project window is open */
+html { scrollbar-gutter: stable; }
+html:has(.project-dialog[open]) { overflow: hidden; }
+.project-dialog { overscroll-behavior: contain; }
