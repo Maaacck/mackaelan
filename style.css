@@ -320,3 +320,9 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 .roles li span:first-child { font-weight: 700; }
 .roles .when { font-family: var(--mono); font-size: .78rem; color: var(--ink-soft); }
 .ph { color: var(--ink-soft); font-style: italic; opacity: .85; }
+
+/* ---------- Square corners on every box (buttons and tags stay rounded) ---------- */
+:root { --radius: 0; }
+.card, .entry, .stat, .courses li, .contact-card, .roles,
+.project svg, .hero-photo, .project-dialog, .dlg-main, .dlg-thumbs button,
+.email-list, .email-list a, .resume-frame iframe { border-radius: 0; }
