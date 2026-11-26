@@ -84,6 +84,27 @@
             </g>
           </svg>
       </article>
+      <article class="card project" data-project="claw" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: 3-Pronged Robotic Claw">
+        <div>
+          <p class="kicker">Robotics</p>
+          <h3>3-Pronged Robotic Claw</h3>
+          <p class="meta">May 2026</p>
+          <p>A three-fingered robotic gripper.</p>
+          <ul class="tags"><li>Robotics</li><li>Robotic design</li><li>CAD</li></ul>
+          <span class="go">View details &amp; photos →</span>
+        </div>
+        <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a three-pronged robotic claw">
+            <rect width="360" height="220" fill="#16144a"/>
+            <rect x="160" y="18" width="40" height="58" rx="8" fill="#8f5bff"/>
+            <circle cx="180" cy="86" r="22" fill="#2f8cff"/>
+            <g stroke="#ee8cff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <polyline points="165,100 118,140 132,190"/>
+              <polyline points="195,100 242,140 228,190"/>
+              <polyline points="180,108 180,160 168,200"/>
+            </g>
+            <circle cx="180" cy="86" r="8" fill="#16144a"/>
+          </svg>
+      </article>
     </div>
   </section>
 
@@ -111,7 +132,7 @@
     <div class="dlg-body">
       <p class="kicker">Robotics · May 2025 – Oct 2025</p>
       <h3 id="dlg-hexapod-title">Bioinspired Hexapod Robot</h3>
-      <p class="dlg-overview">A six-legged walking robot modeled on how insects move. I took it from CAD model to printed parts to working code between May and October 2025.</p>
+      <p class="dlg-overview">A six-legged walking robot inspired by insect biology, built to move stably over different terrains. I took it from CAD model to printed parts to working code between May and October 2025.</p>
           <h4>Design</h4>
           <ul class="points">
             <li>Designed the body and all six legs in Fusion 360.</li>
@@ -119,11 +140,11 @@
           </ul>
           <h4>Electronics &amp; code</h4>
           <ul class="points">
-            <li>Programmed the robot in C++.</li>
-            <li>Used a Teensy microcontroller together with a Raspberry Pi.</li>
+            <li>Programmed it in C++ on a Teensy microcontroller.</li>
+            <li>Developed the control software in Python on a Raspberry Pi.</li>
           </ul>
       <h4>Built with</h4>
-      <ul class="tags"><li>C++</li><li>Teensy</li><li>Raspberry Pi</li><li>Fusion 360</li><li>3D printing</li></ul>
+      <ul class="tags"><li>C++</li><li>Python</li><li>Teensy</li><li>Raspberry Pi</li><li>Fusion 360</li><li>3D printing</li></ul>
     </div>
   </dialog>
   <dialog class="project-dialog" id="dlg-headphones" aria-labelledby="dlg-headphones-title">
@@ -157,6 +178,38 @@
           </ul>
       <h4>Built with</h4>
       <ul class="tags"><li>Fusion 360</li><li>3D printing</li><li>Soldering</li></ul>
+    </div>
+  </dialog>
+  <dialog class="project-dialog" id="dlg-claw" aria-labelledby="dlg-claw-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-photos="images/claw-">
+      <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a three-pronged robotic claw">
+            <rect width="360" height="220" fill="#16144a"/>
+            <rect x="160" y="18" width="40" height="58" rx="8" fill="#8f5bff"/>
+            <circle cx="180" cy="86" r="22" fill="#2f8cff"/>
+            <g stroke="#ee8cff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <polyline points="165,100 118,140 132,190"/>
+              <polyline points="195,100 242,140 228,190"/>
+              <polyline points="180,108 180,160 168,200"/>
+            </g>
+            <circle cx="180" cy="86" r="8" fill="#16144a"/>
+          </svg></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Robotics · May 2026</p>
+      <h3 id="dlg-claw-title">3-Pronged Robotic Claw</h3>
+      <p class="dlg-overview">Placeholder: a short overview of what the claw does and why you built it.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you designed the claw.</li>
+          </ul>
+          <h4>Build &amp; testing</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you built and tested it.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>Robotics</li><li>Robotic design</li><li>CAD</li></ul>
     </div>
   </dialog>
 <script>

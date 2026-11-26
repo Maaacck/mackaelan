@@ -313,3 +313,10 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .hero-photo { order: -1; width: min(240px, 68%); }
 }
 .hero-grid:has(.hero-photo[hidden]) { grid-template-columns: 1fr; }
+
+/* ---------- Role history + placeholders ---------- */
+.roles { list-style: none; margin: 0 0 14px; padding: 10px 14px; border-radius: 10px; background: rgba(143, 91, 255, .1); display: grid; gap: 4px; }
+.roles li { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .92rem; }
+.roles li span:first-child { font-weight: 700; }
+.roles .when { font-family: var(--mono); font-size: .78rem; color: var(--ink-soft); }
+.ph { color: var(--ink-soft); font-style: italic; opacity: .85; }
