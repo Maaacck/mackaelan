@@ -183,13 +183,28 @@
   }
   document.querySelectorAll('.project[data-project]').forEach(card => {
     const dlg = document.getElementById('dlg-' + card.dataset.project);
-    const open = () => { dlg.showModal(); loadGallery(dlg.querySelector('.dlg-gallery')); };
+    const open = () => {
+      const r = card.getBoundingClientRect();
+      dlg.style.setProperty('--dx', `${r.left + r.width / 2 - innerWidth / 2}px`);
+      dlg.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`);
+      dlg.classList.remove('anim-out'); dlg.classList.add('anim-in');
+      dlg.showModal(); loadGallery(dlg.querySelector('.dlg-gallery'));
+    };
     card.addEventListener('click', open);
     card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
   });
+  const closeDlg = d => {
+    if (!d.open || d.classList.contains('anim-out')) return;
+    d.classList.remove('anim-in'); d.classList.add('anim-out');
+    const done = () => { clearTimeout(t); d.removeEventListener('animationend', onEnd); d.classList.remove('anim-out'); d.close(); };
+    const onEnd = e => { if (e.target === d && e.animationName === 'dlg-out' && !e.pseudoElement) done(); };
+    const t = setTimeout(done, 400);
+    d.addEventListener('animationend', onEnd);
+  };
   document.querySelectorAll('.project-dialog').forEach(d => {
-    d.querySelector('.dlg-close').addEventListener('click', () => d.close());
-    d.addEventListener('click', e => { if (e.target === d) d.close(); });
+    d.querySelector('.dlg-close').addEventListener('click', () => closeDlg(d));
+    d.addEventListener('click', e => { if (e.target === d) closeDlg(d); });
+    d.addEventListener('cancel', e => { e.preventDefault(); closeDlg(d); });
   });
 })();
 </script>

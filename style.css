@@ -231,15 +231,31 @@ footer .small { color: var(--ink-soft); font-size: .8rem; margin: 0; font-family
 
 .project-dialog {
   width: min(960px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
-  padding: 0; border: 1px solid var(--line); border-radius: 18px;
+  padding: 0; border: 1px solid transparent; border-radius: 18px;
   background: rgba(14, 12, 44, .92); color: var(--ink);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
   overflow: auto;
 }
 .project-dialog::backdrop { background: rgba(8, 6, 26, .7); backdrop-filter: blur(4px); }
-.project-dialog[open] { display: grid; grid-template-columns: 1.15fr 1fr; animation: dlg-in .18s ease-out; }
-@keyframes dlg-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.project-dialog[open] { display: grid; grid-template-columns: 1.15fr 1fr; }
+/* Open: the window grows out of the card you clicked; content rises in after it. Close: it shrinks and fades. */
+.project-dialog.anim-in { animation: dlg-in .45s cubic-bezier(.16, 1, .3, 1) both; }
+.project-dialog.anim-in::backdrop { animation: bd-in .35s ease both; }
+.project-dialog.anim-in .dlg-gallery { animation: dlg-rise .5s .08s cubic-bezier(.16, 1, .3, 1) both; }
+.project-dialog.anim-in .dlg-body { animation: dlg-rise .5s .16s cubic-bezier(.16, 1, .3, 1) both; }
+.project-dialog.anim-out { animation: dlg-out .24s cubic-bezier(.4, 0, 1, 1) both; }
+.project-dialog.anim-out::backdrop { animation: bd-out .24s ease both; }
+@keyframes dlg-in { from { opacity: 0; transform: translate(var(--dx, 0), var(--dy, 0)) scale(.55); } to { opacity: 1; transform: none; } }
+@keyframes dlg-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(14px) scale(.94); } }
+@keyframes dlg-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes bd-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bd-out { from { opacity: 1; } to { opacity: 0; } }
+.project:active { transform: scale(.985); }
+@media (prefers-reduced-motion: reduce) {
+  .project-dialog.anim-in, .project-dialog.anim-out, .project-dialog.anim-in .dlg-gallery, .project-dialog.anim-in .dlg-body,
+  .project-dialog.anim-in::backdrop, .project-dialog.anim-out::backdrop { animation-duration: .01ms; animation-delay: 0s; }
+}
 .dlg-close {
   position: absolute; top: 12px; right: 12px; z-index: 2; width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid var(--line); background: rgba(14, 12, 44, .7); color: var(--ink); font-size: 1rem; cursor: pointer;
