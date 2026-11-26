@@ -57,9 +57,15 @@
           <li>Plan and run club and competition events.</li>
           <li>Manage social media for PiE (@pierobotics), handling Instagram posts and graphic design.</li>
         </ul>
-        <div class="graphics" data-photos="images/pie-graphics-" hidden>
-          <h4>Graphics I made for @pierobotics</h4>
-          <div class="graphics-grid"></div>
+        <div class="ig" data-prefix="images/pie-post-">
+          <div class="ig-head">
+            <h4>Instagram posts I designed for @pierobotics</h4>
+            <div class="ig-arrows">
+              <button class="ig-prev" type="button" aria-label="Scroll posts left">‹</button>
+              <button class="ig-next" type="button" aria-label="Scroll posts right">›</button>
+            </div>
+          </div>
+          <div class="ig-track"></div>
         </div>
         <ul class="tags"><li>Leadership</li><li>Project management</li><li>Game design</li><li>Social media</li><li>Graphic design</li><li>Figma</li><li>Photoshop</li></ul>
       </article>
@@ -143,42 +149,56 @@
       </div>
     </div>
   </section>
-<dialog class="lightbox" id="lightbox" aria-label="Graphic preview">
+<dialog class="lightbox" id="lightbox" aria-label="Post preview">
   <button class="dlg-close" type="button" aria-label="Close">✕</button>
-  <button class="lb-nav lb-prev" type="button" aria-label="Previous graphic">‹</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous image">‹</button>
   <img alt="">
-  <button class="lb-nav lb-next" type="button" aria-label="Next graphic">›</button>
+  <button class="lb-nav lb-next" type="button" aria-label="Next image">›</button>
+  <p class="lb-count"></p>
 </dialog>
 <script>
 (() => {
-  const EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
+  const EXTS = ['jpg', 'png', 'webp', 'jpeg', 'JPG', 'PNG'];
   const tryLoad = src => new Promise(res => { const im = new Image(); im.onload = () => res(src); im.onerror = () => res(null); im.src = src; });
-  const lb = document.getElementById('lightbox'), img = lb.querySelector('img');
+  const find = async base => { for (const e of EXTS) { const s = await tryLoad(`${base}.${e}`); if (s) return s; } return null; };
+  const COLORS = ['#2b2bff', '#8f5bff', '#bb00dd', '#2f8cff', '#6a3cff', '#d43cf0'];
+  const placeholder = (p, s, n) => 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 400 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${COLORS[(p + s) % COLORS.length]}"/><stop offset="1" stop-color="#12122e"/></linearGradient></defs><rect width="400" height="500" fill="url(#g)"/><text x="200" y="235" text-anchor="middle" font-family="sans-serif" font-size="36" font-weight="700" fill="#fff">Post ${p}</text><text x="200" y="280" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#ee8cff">${n > 1 ? `Slide ${s} of ${n}` : 'Single image'}</text><text x="200" y="470" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#b9b8ec">placeholder</text></svg>`);
+  const PLACEHOLDER_POSTS = [3, 1, 4, 1, 2, 1];
+
+  const lb = document.getElementById('lightbox'), img = lb.querySelector('img'), count = lb.querySelector('.lb-count');
   let list = [], idx = 0;
-  const show = i => { idx = (i + list.length) % list.length; img.src = list[idx]; };
+  const show = i => { idx = (i + list.length) % list.length; img.src = list[idx]; count.textContent = list.length > 1 ? `${idx + 1} / ${list.length}` : ''; };
+  const open = (slides, i) => { list = slides; lb.classList.toggle('single', slides.length === 1); show(i); lb.showModal(); };
   lb.querySelector('.dlg-close').addEventListener('click', () => lb.close());
   lb.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1));
   lb.querySelector('.lb-next').addEventListener('click', () => show(idx + 1));
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
   lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
-  document.querySelectorAll('.graphics[data-photos]').forEach(async g => {
-    const found = [];
-    for (let i = 1; i <= 30; i++) {
-      let s = null;
-      for (const e of EXTS) { s = await tryLoad(`${g.dataset.photos}${i}.${e}`); if (s) break; }
-      if (!s) break;
-      found.push(s);
+
+  document.querySelectorAll('.ig[data-prefix]').forEach(async ig => {
+    let posts = [];
+    for (let p = 1; p <= 30; p++) {
+      const slides = [];
+      for (let s = 1; s <= 10; s++) { const src = await find(`${ig.dataset.prefix}${p}-${s}`); if (!src) break; slides.push(src); }
+      if (!slides.length) break;
+      posts.push(slides);
     }
-    if (!found.length) return;
-    const grid = g.querySelector('.graphics-grid');
-    found.forEach((s, i) => {
+    if (!posts.length) posts = PLACEHOLDER_POSTS.map((n, i) => Array.from({ length: n }, (_, j) => placeholder(i + 1, j + 1, n)));
+    const track = ig.querySelector('.ig-track');
+    posts.forEach((slides, i) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.setAttribute('aria-label', `Open graphic ${i + 1}`);
-      b.innerHTML = `<img src="${s}" alt="" loading="lazy">`;
-      b.addEventListener('click', () => { list = found; lb.classList.toggle('single', found.length === 1); show(i); lb.showModal(); });
-      grid.appendChild(b);
+      b.type = 'button';
+      b.className = 'ig-post' + (slides.length > 1 ? ' multi' : '');
+      b.setAttribute('aria-label', `Open post ${i + 1}` + (slides.length > 1 ? ` (${slides.length} images)` : ''));
+      b.innerHTML = slides.slice(0, 3).map((s, k) => `<img src="${s}" alt="" loading="lazy" style="--k:${k}">`).reverse().join('')
+        + (slides.length > 1 ? `<span class="ig-badge">⧉ ${slides.length}</span>` : '');
+      b.addEventListener('click', () => open(slides, 0));
+      track.appendChild(b);
     });
-    g.hidden = false;
+    const step = () => Math.max(200, track.clientWidth * 0.8);
+    ig.querySelector('.ig-prev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    ig.querySelector('.ig-next').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
   });
 })();
 </script>
