@@ -112,6 +112,11 @@
             <span class="sp-ph"><small>Homepage I designed</small>Welcome to<br>Strawberry Creek!</span>
           </span>
         </a>
+        <div class="pie-photos three">
+          <button type="button" class="pie-photo" aria-label="Enlarge photo of installing a sensor post in Strawberry Creek"><img src="images/creek-sensor.avif" alt="Standing in Strawberry Creek, driving a sensor post into the creek bed with a red post driver" width="720" height="960" loading="lazy" draggable="false" style="object-position:50% 40%"><span class="cap">Sensor install</span></button>
+          <button type="button" class="pie-photo" aria-label="Enlarge photo of the Strawberry Creek team on a bridge"><img src="images/creek-team.avif" alt="The Strawberry Creek Monitoring Group lined up on a wooden footbridge over the creek" width="960" height="720" loading="lazy" draggable="false"><span class="cap">The team</span></button>
+          <button type="button" class="pie-photo" aria-label="Enlarge photo of a Strawberry Creek team meeting"><img src="images/creek-meeting.avif" alt="Strawberry Creek Monitoring Group members around a conference table during a meeting" width="960" height="720" loading="lazy" draggable="false"><span class="cap">Team meeting</span></button>
+        </div>
         <ul class="tags"><li>CAD</li><li>Environmental sensing</li><li>Figma</li></ul>
       </article>
       <article class="entry">
@@ -130,10 +135,10 @@
           <li class="ph">Placeholder: add details about this role.</li>
         </ul>
         <div class="pie-photos">
-          <a class="pie-photo" href="projects.html#wedge" aria-label="See The Wedge in Projects"><img src="images/combat-wedge.avif" alt="The Wedge, a yellow 3D-printed combat robot with a black arm, on a workbench" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge →</span></a>
-          <a class="pie-photo" href="projects.html#ourple" aria-label="See Ourple in Projects"><img src="images/combat-ourple.avif" alt="Ourple, an aluminum combat robot with a vertical spinning weapon, open to show its wiring" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple →</span></a>
-          <a class="pie-photo" href="projects.html#wedge" aria-label="See The Wedge in Projects"><img src="images/combat-team-wedge.avif" alt="Four team members posing with The Wedge" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge team →</span></a>
-          <a class="pie-photo" href="projects.html#ourple" aria-label="See Ourple in Projects"><img src="images/combat-team-ourple.avif" alt="Four team members posing with Ourple and its radio controller" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple team →</span></a>
+          <a class="pie-photo" href="projects.html#wedge" aria-label="Show details for The Wedge"><img src="images/combat-wedge.avif" alt="The Wedge, a yellow 3D-printed combat robot with a black arm, on a workbench" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge →</span></a>
+          <a class="pie-photo" href="projects.html#ourple" aria-label="Show details for Ourple"><img src="images/combat-ourple.avif" alt="Ourple, an aluminum combat robot with a vertical spinning weapon, open to show its wiring" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple →</span></a>
+          <a class="pie-photo" href="projects.html#wedge" aria-label="Show details for The Wedge"><img src="images/combat-team-wedge.avif" alt="Four team members posing with The Wedge" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge team →</span></a>
+          <a class="pie-photo" href="projects.html#ourple" aria-label="Show details for Ourple"><img src="images/combat-team-ourple.avif" alt="Four team members posing with Ourple and its radio controller" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple team →</span></a>
         </div>
         <ul class="tags"><li>CAD</li><li>Engineering design</li><li>Combat robotics</li></ul>
       </article>
@@ -365,6 +370,56 @@ document.addEventListener('click', e => { const d = document.querySelector('.ema
 })();
 </script>
 </div>
+<script>
+// Combat robot photos open that robot's project details right here, pulled from the Projects page.
+(() => {
+  const links = [...document.querySelectorAll('a.pie-photo[href^="projects.html#"]')];
+  if (!links.length) return;
+  let doc = null;
+  const getDoc = () => doc || (doc = fetch('projects.html').then(r => r.text()).then(t => new DOMParser().parseFromString(t, 'text/html')));
+  const dialogs = {};
+  const closeDlg = d => {
+    if (!d.open || d.classList.contains('anim-out')) return;
+    d.classList.remove('anim-in'); d.classList.add('anim-out');
+    setTimeout(() => { d.classList.remove('anim-out'); d.close(); }, 260);
+  };
+  const build = async id => {
+    if (dialogs[id]) return dialogs[id];
+    const src = (await getDoc()).getElementById('dlg-' + id);
+    if (!src) return null;
+    const d = document.importNode(src, true);
+    document.body.appendChild(d);
+    const g = d.querySelector('.dlg-gallery'), main = g.querySelector('.dlg-main'), thumbs = g.querySelector('.dlg-thumbs');
+    const list = (g.dataset.list || '').split(',').map(s => s.trim()).filter(Boolean);
+    list.forEach((s, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', `Photo ${i + 1}`);
+      b.innerHTML = `<img src="${s}" alt="">`;
+      b.onclick = () => { main.innerHTML = `<img src="${s}" alt="">`; thumbs.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
+      thumbs.appendChild(b); if (i === 0) b.click();
+    });
+    if (list.length < 2) thumbs.hidden = true;
+    d.querySelector('.dlg-close').addEventListener('click', () => closeDlg(d));
+    d.addEventListener('click', e => { if (e.target === d) closeDlg(d); });
+    d.addEventListener('cancel', e => { e.preventDefault(); closeDlg(d); });
+    return (dialogs[id] = d);
+  };
+  links.forEach(a => {
+    a.addEventListener('mouseenter', getDoc, { once: true });
+    a.addEventListener('click', async e => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      let d;
+      try { d = await build(a.hash.slice(1)); } catch { d = null; }
+      if (!d) { location.href = a.href; return; }
+      const r = a.getBoundingClientRect();
+      d.style.setProperty('--dx', `${r.left + r.width / 2 - innerWidth / 2}px`);
+      d.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`);
+      d.classList.remove('anim-out'); d.classList.add('anim-in');
+      d.showModal();
+    });
+  });
+})();
+</script>
 <script src="cursor.js" defer></script>
 </body>
 </html>
