@@ -206,13 +206,9 @@
   img.addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40 && list.length > 1) show(idx + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
 
   document.querySelectorAll('.ig[data-prefix]').forEach(async ig => {
-    let posts = [];
-    for (let p = 1; p <= 30; p++) {
-      const slides = [];
-      for (let s = 1; s <= 10; s++) { const src = await find(`${ig.dataset.prefix}${p}-${s}`); if (!src) break; slides.push(src); }
-      if (!slides.length) break;
-      posts.push(slides);
-    }
+    // Slide counts for each @pierobotics post, oldest (July 24, 2026) first: images/pie-post-{post}-{slide}.webp
+    const POST_SLIDES = [1, 8, 18, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 6, 3, 7, 1];
+    let posts = POST_SLIDES.map((n, i) => Array.from({ length: n }, (_, j) => `${ig.dataset.prefix}${i + 1}-${j + 1}.webp`));
     if (!posts.length) posts = PLACEHOLDER_POSTS.map((n, i) => Array.from({ length: n }, (_, j) => placeholder(i + 1, j + 1, n)));
 
     // A continuously moving belt of posts that loops forever, curved like a rotating drum.
