@@ -196,6 +196,22 @@
       b.addEventListener('click', () => open(slides, 0));
       track.appendChild(b);
     });
+    // Auto-scroll one post at a time; pause while the visitor is hovering, touching, or viewing a post.
+    let paused = false;
+    ['mouseenter', 'focusin', 'pointerdown'].forEach(ev => ig.addEventListener(ev, () => { paused = true; }, { passive: true }));
+    ['mouseleave', 'focusout'].forEach(ev => ig.addEventListener(ev, () => { paused = false; }));
+    track.addEventListener('touchend', () => setTimeout(() => { paused = false; }, 4000), { passive: true });
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(() => {
+        if (paused || lb.open || document.hidden) return;
+        const max = track.scrollWidth - track.clientWidth;
+        if (max <= 0) return;
+        const card = track.querySelector('.ig-post');
+        const px = card ? card.offsetWidth + 30 : 180;
+        if (track.scrollLeft >= max - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
+        else track.scrollBy({ left: px, behavior: 'smooth' });
+      }, 2800);
+    }
     const step = () => Math.max(200, track.clientWidth * 0.8);
     ig.querySelector('.ig-prev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
     ig.querySelector('.ig-next').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
