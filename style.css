@@ -221,3 +221,46 @@ footer .small { color: var(--ink-soft); font-size: .8rem; margin: 0; font-family
 }
 .email-list a { display: block; padding: 8px 12px; border-radius: 10px; text-decoration: none; font-weight: 500; color: var(--ink); }
 .email-list a:hover { background: rgba(238, 140, 255, .18); color: #fff; }
+
+/* ---------- Clickable projects + detail pop-up ---------- */
+.project { cursor: pointer; }
+.project:hover, .project:focus-visible { border-color: rgba(238, 140, 255, .6); background: var(--glass-strong); outline: none; }
+.project .meta { font-family: var(--mono); font-size: .8rem; color: var(--ink-soft); margin: 0 0 10px; }
+.project .go { display: inline-block; margin-top: 14px; color: #c9b6ff; font-weight: 700; font-size: .9rem; }
+.project:hover .go, .project:focus-visible .go { color: var(--sunset); }
+
+.project-dialog {
+  width: min(960px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
+  padding: 0; border: 1px solid var(--line); border-radius: 18px;
+  background: rgba(14, 12, 44, .92); color: var(--ink);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+  overflow: auto;
+}
+.project-dialog::backdrop { background: rgba(8, 6, 26, .7); backdrop-filter: blur(4px); }
+.project-dialog[open] { display: grid; grid-template-columns: 1.15fr 1fr; animation: dlg-in .18s ease-out; }
+@keyframes dlg-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.dlg-close {
+  position: absolute; top: 12px; right: 12px; z-index: 2; width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--line); background: rgba(14, 12, 44, .7); color: var(--ink); font-size: 1rem; cursor: pointer;
+}
+.dlg-close:hover { border-color: var(--sunset); color: var(--sunset); }
+.dlg-gallery { padding: 20px; display: grid; gap: 12px; align-content: start; }
+.dlg-main { border-radius: 12px; overflow: hidden; background: #0b0a24; aspect-ratio: 4 / 3; display: grid; place-items: center; }
+.dlg-main img, .dlg-main svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dlg-main:has(> svg) { aspect-ratio: 360 / 220; }
+.dlg-thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
+.dlg-thumbs button { padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; cursor: pointer; background: none; aspect-ratio: 1; }
+.dlg-thumbs button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dlg-thumbs button.on, .dlg-thumbs button:hover { border-color: var(--sunset); }
+.dlg-body { padding: 28px 28px 28px 8px; }
+.dlg-body h3 { font-family: var(--display); font-weight: 400; font-size: 1.7rem; margin: 0 0 12px; padding-right: 40px; }
+.dlg-body h4 { font-family: var(--display); font-weight: 400; font-size: 1.05rem; color: #c9b6ff; margin: 20px 0 6px; }
+.dlg-body .dlg-overview { color: var(--ink-soft); margin: 0; }
+.dlg-body ul.points { margin: 0; padding-left: 20px; }
+.dlg-body ul.points li { margin: 4px 0; }
+.dlg-body ul.points li::marker { color: var(--sunset); }
+@media (max-width: 760px) {
+  .project-dialog[open] { grid-template-columns: 1fr; }
+  .dlg-body { padding: 4px 22px 24px; }
+}

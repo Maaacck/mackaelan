@@ -32,22 +32,19 @@
     <div class="wrap">
       <p class="eyebrow">Projects</p>
       <h1>Projects</h1>
-      <p class="lede">Things I've designed and built on my own time.</p>
+      <p class="lede">Things I've designed and built on my own time. Click a project for details and photos.</p>
     </div>
   </header>
   <section class="block">
     <div class="wrap entries">
-      <article class="card project">
+      <article class="card project" data-project="hexapod" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: Bioinspired Hexapod Robot">
         <div>
           <p class="kicker">Robotics</p>
           <h3>Bioinspired Hexapod Robot</h3>
-          <p class="meta" style="font-family:var(--mono);font-size:.8rem;">May 2025 – Oct 2025</p>
-          <p>An insect-inspired six-legged walking robot.</p>
-          <ul class="points" style="padding-left:20px;margin:0 0 14px;">
-              <li>Designed the body and legs in Fusion 360 and 3D-printed every part.</li>
-              <li>Programmed it in C++ using a Teensy and a Raspberry Pi.</li>
-          </ul>
+          <p class="meta">May 2025 – Oct 2025</p>
+          <p>An insect-inspired six-legged walking robot I designed, 3D-printed, and programmed myself.</p>
           <ul class="tags"><li>C++</li><li>Teensy</li><li>Raspberry Pi</li><li>Fusion 360</li><li>3D printing</li></ul>
+          <span class="go">View details &amp; photos →</span>
         </div>
         <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
             <rect width="360" height="220" fill="#16144a"/>
@@ -66,17 +63,14 @@
             <g fill="#ee8cff"><circle cx="70" cy="95" r="5"/><circle cx="60" cy="155" r="5"/><circle cx="75" cy="195" r="5"/><circle cx="290" cy="95" r="5"/><circle cx="300" cy="155" r="5"/><circle cx="285" cy="195" r="5"/></g>
           </svg>
       </article>
-      <article class="card project">
+      <article class="card project" data-project="headphones" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: Custom Headphones">
         <div>
           <p class="kicker">Audio hardware</p>
           <h3>Custom Headphones</h3>
-          <p class="meta" style="font-family:var(--mono);font-size:.8rem;">Aug 2026 – Sep 2026</p>
-          <p>A pair of headphones built from scratch.</p>
-          <ul class="points" style="padding-left:20px;margin:0 0 14px;">
-              <li>Modeled the case and clips in Fusion 360 and printed them in PLA, ABS, and PETG.</li>
-              <li>Soldered the drivers to 0.78 mm 2-pin connectors.</li>
-          </ul>
+          <p class="meta">Aug 2026 – Sep 2026</p>
+          <p>A pair of headphones built from scratch, from the 3D-printed case to the soldered connectors.</p>
           <ul class="tags"><li>Fusion 360</li><li>3D printing</li><li>Soldering</li></ul>
+          <span class="go">View details &amp; photos →</span>
         </div>
         <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of over-ear headphones">
             <rect width="360" height="220" fill="#1d1450"/>
@@ -92,6 +86,113 @@
       </article>
     </div>
   </section>
+
+  <dialog class="project-dialog" id="dlg-hexapod" aria-labelledby="dlg-hexapod-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-photos="images/hexapod-">
+      <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
+            <rect width="360" height="220" fill="#16144a"/>
+            <g stroke="#ee8cff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <polyline points="140,85 95,55 70,95"/>
+              <polyline points="140,110 85,110 60,155"/>
+              <polyline points="140,135 95,165 75,195"/>
+              <polyline points="220,85 265,55 290,95"/>
+              <polyline points="220,110 275,110 300,155"/>
+              <polyline points="220,135 265,165 285,195"/>
+            </g>
+            <rect x="130" y="70" width="100" height="80" rx="22" fill="#8f5bff"/>
+            <rect x="152" y="92" width="56" height="36" rx="6" fill="#16144a"/>
+            <circle cx="168" cy="110" r="5" fill="#ee8cff"/>
+            <circle cx="192" cy="110" r="5" fill="#ee8cff"/>
+            <g fill="#ee8cff"><circle cx="70" cy="95" r="5"/><circle cx="60" cy="155" r="5"/><circle cx="75" cy="195" r="5"/><circle cx="290" cy="95" r="5"/><circle cx="300" cy="155" r="5"/><circle cx="285" cy="195" r="5"/></g>
+          </svg></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Robotics · May 2025 – Oct 2025</p>
+      <h3 id="dlg-hexapod-title">Bioinspired Hexapod Robot</h3>
+      <p class="dlg-overview">A six-legged walking robot modeled on how insects move. I took it from CAD model to printed parts to working code between May and October 2025.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li>Designed the body and all six legs in Fusion 360.</li>
+            <li>3D-printed every structural part.</li>
+          </ul>
+          <h4>Electronics &amp; code</h4>
+          <ul class="points">
+            <li>Programmed the robot in C++.</li>
+            <li>Used a Teensy microcontroller together with a Raspberry Pi.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>C++</li><li>Teensy</li><li>Raspberry Pi</li><li>Fusion 360</li><li>3D printing</li></ul>
+    </div>
+  </dialog>
+  <dialog class="project-dialog" id="dlg-headphones" aria-labelledby="dlg-headphones-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-photos="images/headphones-">
+      <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of over-ear headphones">
+            <rect width="360" height="220" fill="#1d1450"/>
+            <path d="M95 140 V110 a85 85 0 0 1 170 0 V140" fill="none" stroke="#2f8cff" stroke-width="12" stroke-linecap="round"/>
+            <rect x="70" y="120" width="50" height="76" rx="18" fill="#ee8cff"/>
+            <rect x="240" y="120" width="50" height="76" rx="18" fill="#ee8cff"/>
+            <rect x="82" y="134" width="26" height="48" rx="10" fill="#1d1450" opacity=".35"/>
+            <rect x="252" y="134" width="26" height="48" rx="10" fill="#1d1450" opacity=".35"/>
+            <g stroke="#2f8cff" stroke-width="3" fill="none" opacity=".8">
+              <path d="M300 150 q20 0 22 20"/><path d="M300 135 q36 0 38 36"/>
+            </g>
+          </svg></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Audio hardware · Aug 2026 – Sep 2026</p>
+      <h3 id="dlg-headphones-title">Custom Headphones</h3>
+      <p class="dlg-overview">A custom pair of headphones I designed and assembled myself in August and September 2026.</p>
+          <h4>Design &amp; printing</h4>
+          <ul class="points">
+            <li>Modeled the case and clips in Fusion 360.</li>
+            <li>Printed the parts in PLA, ABS, and PETG.</li>
+          </ul>
+          <h4>Electronics</h4>
+          <ul class="points">
+            <li>Soldered the drivers to 0.78 mm 2-pin connectors, a common standard for detachable headphone cables.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>Fusion 360</li><li>3D printing</li><li>Soldering</li></ul>
+    </div>
+  </dialog>
+<script>
+(() => {
+  const EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
+  const tryLoad = src => new Promise(res => { const im = new Image(); im.onload = () => res(src); im.onerror = () => res(null); im.src = src; });
+  async function findPhoto(prefix, i) { for (const e of EXTS) { const s = await tryLoad(`${prefix}${i}.${e}`); if (s) return s; } return null; }
+  async function loadGallery(g) {
+    if (g.dataset.loaded) return; g.dataset.loaded = '1';
+    const main = g.querySelector('.dlg-main'), thumbs = g.querySelector('.dlg-thumbs');
+    const fallback = main.innerHTML; const photos = [];
+    for (let i = 1; i <= 12; i++) { const s = await findPhoto(g.dataset.photos, i); if (!s) break; photos.push(s); }
+    if (!photos.length) return;
+    const show = (s, btn) => {
+      main.innerHTML = `<img src="${s}" alt="">`;
+      thumbs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+    };
+    photos.forEach((s, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', `Photo ${i + 1}`);
+      b.innerHTML = `<img src="${s}" alt="">`; b.onclick = () => show(s, b); thumbs.appendChild(b);
+      if (i === 0) show(s, b);
+    });
+    if (photos.length === 1) thumbs.hidden = true;
+  }
+  document.querySelectorAll('.project[data-project]').forEach(card => {
+    const dlg = document.getElementById('dlg-' + card.dataset.project);
+    const open = () => { dlg.showModal(); loadGallery(dlg.querySelector('.dlg-gallery')); };
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  document.querySelectorAll('.project-dialog').forEach(d => {
+    d.querySelector('.dlg-close').addEventListener('click', () => d.close());
+    d.addEventListener('click', e => { if (e.target === d) d.close(); });
+  });
+})();
+</script>
 </main>
 
 <footer id="contact">
