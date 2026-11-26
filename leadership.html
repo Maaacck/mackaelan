@@ -165,6 +165,7 @@
   const placeholder = (p, s, n) => 'data:image/svg+xml;utf8,' + encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 400 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${COLORS[(p + s) % COLORS.length]}"/><stop offset="1" stop-color="#12122e"/></linearGradient></defs><rect width="400" height="500" fill="url(#g)"/><text x="200" y="235" text-anchor="middle" font-family="sans-serif" font-size="36" font-weight="700" fill="#fff">Post ${p}</text><text x="200" y="280" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#ee8cff">${n > 1 ? `Slide ${s} of ${n}` : 'Single image'}</text><text x="200" y="470" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#b9b8ec">placeholder</text></svg>`);
   const PLACEHOLDER_POSTS = [3, 1, 4, 1, 2, 1];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const lb = document.getElementById('lightbox'), img = lb.querySelector('img'), count = lb.querySelector('.lb-count');
   let list = [], idx = 0;
@@ -185,36 +186,75 @@
       posts.push(slides);
     }
     if (!posts.length) posts = PLACEHOLDER_POSTS.map((n, i) => Array.from({ length: n }, (_, j) => placeholder(i + 1, j + 1, n)));
+
+    // A continuously moving belt of posts that loops forever, curved like a rotating drum.
     const track = ig.querySelector('.ig-track');
-    posts.forEach((slides, i) => {
+    const belt = document.createElement('div');
+    belt.className = 'ig-belt';
+    track.appendChild(belt);
+    let dragMoved = false;
+    const makeSet = clone => posts.forEach((slides, i) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'ig-post' + (slides.length > 1 ? ' multi' : '');
+      if (clone) { b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); }
       b.setAttribute('aria-label', `Open post ${i + 1}` + (slides.length > 1 ? ` (${slides.length} images)` : ''));
-      b.innerHTML = slides.slice(0, 3).map((s, k) => `<img src="${s}" alt="" loading="lazy" style="--k:${k}">`).reverse().join('')
+      b.innerHTML = slides.slice(0, 3).map((s, k) => `<img src="${s}" alt="" loading="lazy" draggable="false" style="--k:${k}">`).reverse().join('')
         + (slides.length > 1 ? `<span class="ig-badge">⧉ ${slides.length}</span>` : '');
-      b.addEventListener('click', () => open(slides, 0));
-      track.appendChild(b);
+      b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } open(slides, 0); });
+      belt.appendChild(b);
     });
-    // Auto-scroll one post at a time; pause while the visitor is hovering, touching, or viewing a post.
-    let paused = false;
-    ['mouseenter', 'focusin', 'pointerdown'].forEach(ev => ig.addEventListener(ev, () => { paused = true; }, { passive: true }));
-    ['mouseleave', 'focusout'].forEach(ev => ig.addEventListener(ev, () => { paused = false; }));
-    track.addEventListener('touchend', () => setTimeout(() => { paused = false; }, 4000), { passive: true });
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setInterval(() => {
-        if (paused || lb.open || document.hidden) return;
-        const max = track.scrollWidth - track.clientWidth;
-        if (max <= 0) return;
-        const card = track.querySelector('.ig-post');
-        const px = card ? card.offsetWidth + 30 : 180;
-        if (track.scrollLeft >= max - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
-        else track.scrollBy({ left: px, behavior: 'smooth' });
-      }, 2800);
-    }
-    const step = () => Math.max(200, track.clientWidth * 0.8);
-    ig.querySelector('.ig-prev').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-    ig.querySelector('.ig-next').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    makeSet(false);
+    const GAP = 30;
+    const firstSetCount = posts.length;
+    const setWidth = () => { const c = belt.children; const last = c[firstSetCount - 1]; return last.offsetLeft + last.offsetWidth + GAP - c[0].offsetLeft; };
+    const copies = () => Math.max(2, Math.ceil(track.clientWidth / Math.max(1, setWidth())) + 1);
+    for (let k = 1; k < copies(); k++) makeSet(true);
+    const cards = [...belt.children];
+
+    let offset = 0, v = 0, pending = 0, paused = false, dragging = false, startX = 0, startOffset = 0;
+    const SPEED = reduce ? 0 : 32; // pixels per second
+    const cardStep = () => cards[0].offsetWidth + GAP;
+    ig.addEventListener('mouseenter', () => { paused = true; });
+    ig.addEventListener('mouseleave', () => { paused = false; });
+    ig.addEventListener('focusin', () => { paused = true; });
+    ig.addEventListener('focusout', () => { paused = false; });
+    ig.querySelector('.ig-prev').addEventListener('click', () => { pending -= cardStep(); });
+    ig.querySelector('.ig-next').addEventListener('click', () => { pending += cardStep(); });
+
+    track.addEventListener('pointerdown', e => { if (e.button !== 0) return; dragging = true; dragMoved = false; startX = e.clientX; startOffset = offset; });
+    track.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (!dragMoved && Math.abs(dx) > 5) { dragMoved = true; track.setPointerCapture(e.pointerId); track.classList.add('dragging'); }
+      if (dragMoved) offset = startOffset - dx;
+    });
+    const endDrag = () => { if (!dragging) return; dragging = false; track.classList.remove('dragging'); setTimeout(() => { dragMoved = false; }, 0); };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+
+    let last = performance.now();
+    const frame = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      const target = (paused || dragging || lb.open) ? 0 : SPEED;
+      v += (target - v) * Math.min(1, dt * 4);
+      if (target === 0 && Math.abs(v) < 0.5) v = 0;
+      offset += v * dt;
+      const p = pending * Math.min(1, dt * 8); offset += p; pending -= p;
+      const w = setWidth();
+      offset = ((offset % w) + w) % w;
+      belt.style.transform = `translateX(${-offset}px)`;
+      const mid = track.clientWidth / 2;
+      for (const c of cards) {
+        const center = c.offsetLeft + c.offsetWidth / 2 - offset;
+        const d = Math.max(-1, Math.min(1, (center - mid) / (mid + c.offsetWidth)));
+        c.style.transform = `perspective(900px) rotateY(${(d * -38).toFixed(2)}deg) scale(${(1 - Math.abs(d) * 0.16).toFixed(3)})`;
+        c.style.opacity = (1 - Math.abs(d) * 0.45).toFixed(3);
+        c.style.zIndex = String(100 - Math.round(Math.abs(d) * 100));
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   });
 })();
 </script>
@@ -281,5 +321,6 @@ document.addEventListener('click', e => { const d = document.querySelector('.ema
 })();
 </script>
 </div>
+<script src="cursor.js" defer></script>
 </body>
 </html>
