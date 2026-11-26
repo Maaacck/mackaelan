@@ -326,3 +326,4 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 .card, .entry, .stat, .courses li, .contact-card, .roles,
 .project svg, .hero-photo, .project-dialog, .dlg-main, .dlg-thumbs button,
 .email-list, .email-list a, .resume-frame iframe { border-radius: 0; }
+.btn, .tags li, .badge, .dlg-close { border-radius: 0; }
