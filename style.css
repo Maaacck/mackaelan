@@ -442,3 +442,15 @@ html:has(dialog[open]) .cursor-dot, html:has(dialog[open]) .cursor-ring { opacit
 .sp-ph small { font-family: "Lato", sans-serif; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--sunset); margin-bottom: 10px; }
 .points a { color: var(--sunset); }
 @media (prefers-reduced-motion: reduce) { .site-preview, .sp-shot img { transition: none; } }
+
+/* ---------- @pierobotics profile link ---------- */
+.ig-head { flex-wrap: wrap; }
+.ig-head h4 { flex: 1 1 220px; }
+.ig-profile { display: inline-flex; align-items: center; gap: 10px; padding: 5px 14px 5px 5px; border: 1px solid rgba(238, 140, 255, .3); background: rgba(10, 6, 30, .5); color: #fff; text-decoration: none; transition: border-color .25s, background .25s, transform .3s cubic-bezier(.16, 1, .3, 1); }
+.ig-profile img { width: 44px; height: 44px; display: block; transition: transform .45s cubic-bezier(.16, 1, .3, 1); }
+.ig-profile span { display: flex; flex-direction: column; line-height: 1.2; }
+.ig-profile b { font-size: .92rem; }
+.ig-profile small { font-size: .74rem; color: var(--sunset); }
+.ig-profile:hover, .ig-profile:focus-visible { border-color: var(--sunset); background: rgba(238, 140, 255, .14); transform: translateY(-2px); }
+.ig-profile:hover img { transform: rotate(-12deg) scale(1.06); }
+@media (prefers-reduced-motion: reduce) { .ig-profile, .ig-profile img { transition: none; } }
