@@ -5,24 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Education & Skills · Mackaelan Songco</title>
 <meta name="description" content="Education and skills of Mackaelan Songco.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<nav class="top">
-  <div class="wrap">
-    <a class="brand" href="index.html">Mackaelan Songco<span>.</span></a>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="experience.html">Experience</a></li>
-      <li><a href="research.html">Research</a></li>
-      <li><a href="leadership.html">Leadership</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="education.html" aria-current="page">Education & Skills</a></li>
-    </ul>
-  </div>
+<nav class="sidebar" aria-label="Main">
+  <a class="brand" href="index.html">Mackaelan <span>Songco</span></a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="leadership.html">Leadership</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="education.html" aria-current="page">Education & Skills</a></li>
+  </ul>
+  <p class="side-foot">Berkeley, CA</p>
 </nav>
 
+<div class="page">
 <main>
   <header class="page-head">
     <div class="wrap">
@@ -110,20 +113,22 @@
 
 <footer id="contact">
   <div class="wrap">
-    <div>
-      <h2>Get in touch</h2>
-      <p class="sub">Always happy to talk hardware, robotics, physics, or research.</p>
-    </div>
-    <div class="links">
-      <details class="email-box">
-        <summary class="btn primary">Email</summary>
-        <div class="email-list">
-          <a href="mailto:mackaelansongco@berkeley.edu">mackaelansongco@berkeley.edu</a>
-          <a href="mailto:mackaelansongco@gmail.com">mackaelansongco@gmail.com</a>
-        </div>
-      </details>
-      <a class="btn" href="https://www.linkedin.com/in/mackaelan-songco-5a1137248/">LinkedIn</a>
-      <a class="btn" href="https://github.com/Maaacck">GitHub</a>
+    <div class="card contact-card">
+      <div>
+        <h2>Get in touch</h2>
+        <p class="sub">Always happy to talk hardware, robotics, physics, or research.</p>
+      </div>
+      <div class="links">
+        <details class="email-box">
+          <summary class="btn primary">Email</summary>
+          <div class="email-list">
+            <a href="mailto:mackaelansongco@berkeley.edu">mackaelansongco@berkeley.edu</a>
+            <a href="mailto:mackaelansongco@gmail.com">mackaelansongco@gmail.com</a>
+          </div>
+        </details>
+        <a class="btn" href="https://www.linkedin.com/in/mackaelan-songco-5a1137248/">LinkedIn</a>
+        <a class="btn" href="https://github.com/Maaacck">GitHub</a>
+      </div>
     </div>
     <p class="small">© <span class="yr">2026</span> Mackaelan Songco · Berkeley, CA</p>
   </div>
@@ -132,5 +137,6 @@
 document.querySelectorAll('.yr').forEach(e => e.textContent = new Date().getFullYear());
 document.addEventListener('click', e => { const d = document.querySelector('.email-box'); if (d && d.open && !d.contains(e.target)) d.open = false; });
 </script>
+</div>
 </body>
 </html>
