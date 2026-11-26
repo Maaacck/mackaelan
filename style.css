@@ -497,3 +497,8 @@ a.pie-photo { color: inherit; text-decoration: none; }
 .project > .proj-shot { width: 100%; height: auto; aspect-ratio: 360 / 220; object-fit: cover; border-radius: 10px; display: block; }
 .pie-photos.three { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 560px) { .pie-photos.three { grid-template-columns: 1fr; } }
+
+/* ---------- Box select: drag a rectangle to highlight just the words inside it (cursor.js) ---------- */
+.select-box { position: absolute; z-index: 2147483640; pointer-events: none; border: 1px solid var(--sunset); background: rgba(238, 140, 255, .12); }
+::highlight(box-select) { background-color: var(--violet); color: #fff; }
+html.box-selecting, html.box-selecting * { user-select: none !important; -webkit-user-select: none !important; }
