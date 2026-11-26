@@ -57,6 +57,10 @@
           <li>Plan and run club and competition events.</li>
           <li>Manage social media for PiE (@pierobotics), handling Instagram posts and graphic design.</li>
         </ul>
+        <div class="graphics" data-photos="images/pie-graphics-" hidden>
+          <h4>Graphics I made for @pierobotics</h4>
+          <div class="graphics-grid"></div>
+        </div>
         <ul class="tags"><li>Leadership</li><li>Project management</li><li>Game design</li><li>Social media</li><li>Graphic design</li><li>Figma</li><li>Photoshop</li></ul>
       </article>
       <article class="entry">
@@ -139,6 +143,45 @@
       </div>
     </div>
   </section>
+<dialog class="lightbox" id="lightbox" aria-label="Graphic preview">
+  <button class="dlg-close" type="button" aria-label="Close">✕</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous graphic">‹</button>
+  <img alt="">
+  <button class="lb-nav lb-next" type="button" aria-label="Next graphic">›</button>
+</dialog>
+<script>
+(() => {
+  const EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
+  const tryLoad = src => new Promise(res => { const im = new Image(); im.onload = () => res(src); im.onerror = () => res(null); im.src = src; });
+  const lb = document.getElementById('lightbox'), img = lb.querySelector('img');
+  let list = [], idx = 0;
+  const show = i => { idx = (i + list.length) % list.length; img.src = list[idx]; };
+  lb.querySelector('.dlg-close').addEventListener('click', () => lb.close());
+  lb.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1));
+  lb.querySelector('.lb-next').addEventListener('click', () => show(idx + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
+  document.querySelectorAll('.graphics[data-photos]').forEach(async g => {
+    const found = [];
+    for (let i = 1; i <= 30; i++) {
+      let s = null;
+      for (const e of EXTS) { s = await tryLoad(`${g.dataset.photos}${i}.${e}`); if (s) break; }
+      if (!s) break;
+      found.push(s);
+    }
+    if (!found.length) return;
+    const grid = g.querySelector('.graphics-grid');
+    found.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-label', `Open graphic ${i + 1}`);
+      b.innerHTML = `<img src="${s}" alt="" loading="lazy">`;
+      b.addEventListener('click', () => { list = found; lb.classList.toggle('single', found.length === 1); show(i); lb.showModal(); });
+      grid.appendChild(b);
+    });
+    g.hidden = false;
+  });
+})();
+</script>
 </main>
 <div class="wrap next"><a href="projects.html">Next: Projects →</a></div>
 
