@@ -70,14 +70,22 @@
       <p class="sub">Always happy to talk hardware, robotics, physics, or research.</p>
     </div>
     <div class="links">
-      <a class="btn primary" href="mailto:mackaelansongco@berkeley.edu">Berkeley email</a>
-      <a class="btn" href="mailto:mackaelansongco@gmail.com">Gmail</a>
+      <details class="email-box">
+        <summary class="btn primary">Email</summary>
+        <div class="email-list">
+          <a href="mailto:mackaelansongco@berkeley.edu">mackaelansongco@berkeley.edu</a>
+          <a href="mailto:mackaelansongco@gmail.com">mackaelansongco@gmail.com</a>
+        </div>
+      </details>
       <a class="btn" href="https://www.linkedin.com/in/mackaelan-songco-5a1137248/">LinkedIn</a>
       <a class="btn" href="https://github.com/Maaacck">GitHub</a>
     </div>
     <p class="small">© <span class="yr">2026</span> Mackaelan Songco · Berkeley, CA</p>
   </div>
 </footer>
-<script>document.querySelectorAll('.yr').forEach(e => e.textContent = new Date().getFullYear());</script>
+<script>
+document.querySelectorAll('.yr').forEach(e => e.textContent = new Date().getFullYear());
+document.addEventListener('click', e => { const d = document.querySelector('.email-box'); if (d && d.open && !d.contains(e.target)) d.open = false; });
+</script>
 </body>
 </html>

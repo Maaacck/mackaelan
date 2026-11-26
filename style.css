@@ -156,3 +156,18 @@ footer h2 { font-size: 1.4rem; }
 footer .links { display: flex; flex-wrap: wrap; gap: 10px; }
 footer .small { grid-column: 1 / -1; color: var(--ink-soft); font-size: .82rem; margin: 8px 0 0; }
 @media (max-width: 720px) { footer .wrap { grid-template-columns: 1fr; } }
+
+/* Email reveal */
+.email-box { position: relative; }
+.email-box summary { list-style: none; cursor: pointer; user-select: none; }
+.email-box summary::-webkit-details-marker { display: none; }
+.email-box summary::after { content: "▾"; display: inline-block; margin-left: 8px; transition: transform .2s ease; }
+.email-box[open] summary::after { transform: rotate(180deg); }
+.email-list {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 20;
+  display: grid; gap: 4px; min-width: 280px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px; box-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+.email-list a { display: block; padding: 8px 12px; border-radius: 10px; text-decoration: none; font-weight: 500; }
+.email-list a:hover { background: var(--gold-soft); color: var(--ink); }
