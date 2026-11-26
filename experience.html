@@ -22,7 +22,6 @@
     <li><a href="research.html">Research</a></li>
     <li><a href="leadership.html">Leadership</a></li>
     <li><a href="projects.html">Projects</a></li>
-    <li><a href="Mackaelan%20Songco%20Resume.pdf" target="_blank" rel="noopener">Resume ↗</a></li>
   </ul>
   <p class="side-foot">Berkeley, CA</p>
 </nav>
@@ -94,7 +93,7 @@
           </div>
         </details>
         <a class="btn" href="https://www.linkedin.com/in/mackaelan-songco-5a1137248/">LinkedIn</a>
-        <a class="btn" href="Mackaelan%20Songco%20Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="btn" href="Mackaelan%20Songco%20Resume.pdf" data-open-resume>Resume</a>
       </div>
     </div>
     <p class="small">© <span class="yr">2026</span> Mackaelan Songco · Berkeley, CA</p>
@@ -103,6 +102,39 @@
 <script>
 document.querySelectorAll('.yr').forEach(e => e.textContent = new Date().getFullYear());
 document.addEventListener('click', e => { const d = document.querySelector('.email-box'); if (d && d.open && !d.contains(e.target)) d.open = false; });
+</script>
+<dialog class="project-dialog resume-dialog" id="dlg-resume" aria-labelledby="dlg-resume-title">
+  <div class="resume-head">
+    <h3 id="dlg-resume-title">Resume</h3>
+    <div class="resume-actions">
+      <a class="btn" href="Mackaelan%20Songco%20Resume.pdf" download>Download</a>
+      <a class="btn" href="Mackaelan%20Songco%20Resume.pdf" target="_blank" rel="noopener">Open in new tab ↗</a>
+    </div>
+  </div>
+  <button class="dlg-close" type="button" aria-label="Close">✕</button>
+  <div class="resume-frame"><iframe title="Mackaelan Songco's resume" data-src="Mackaelan%20Songco%20Resume.pdf#view=FitH&amp;navpanes=0"></iframe></div>
+</dialog>
+<script>
+(() => {
+  const d = document.getElementById('dlg-resume'); if (!d) return;
+  const frame = d.querySelector('iframe');
+  const close = () => {
+    if (!d.open || d.classList.contains('anim-out')) return;
+    d.classList.remove('anim-in'); d.classList.add('anim-out');
+    setTimeout(() => { d.classList.remove('anim-out'); d.close(); }, 250);
+  };
+  document.querySelectorAll('[data-open-resume]').forEach(btn => btn.addEventListener('click', e => {
+    e.preventDefault();
+    const r = btn.getBoundingClientRect();
+    d.style.setProperty('--dx', `${r.left + r.width / 2 - innerWidth / 2}px`);
+    d.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`);
+    if (!frame.getAttribute('src')) frame.src = frame.dataset.src;
+    d.classList.remove('anim-out'); d.classList.add('anim-in'); d.showModal();
+  }));
+  d.querySelector('.dlg-close').addEventListener('click', close);
+  d.addEventListener('click', e => { if (e.target === d) close(); });
+  d.addEventListener('cancel', e => { e.preventDefault(); close(); });
+})();
 </script>
 </div>
 </body>
