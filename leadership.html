@@ -152,7 +152,7 @@
 <dialog class="lightbox" id="lightbox" aria-label="Post preview">
   <button class="dlg-close" type="button" aria-label="Close">✕</button>
   <button class="lb-nav lb-prev" type="button" aria-label="Previous image">‹</button>
-  <img alt="">
+  <img alt="" draggable="false">
   <button class="lb-nav lb-next" type="button" aria-label="Next image">›</button>
   <p class="lb-count"></p>
 </dialog>
@@ -169,13 +169,30 @@
 
   const lb = document.getElementById('lightbox'), img = lb.querySelector('img'), count = lb.querySelector('.lb-count');
   let list = [], idx = 0;
-  const show = i => { idx = (i + list.length) % list.length; img.src = list[idx]; count.textContent = list.length > 1 ? `${idx + 1} / ${list.length}` : ''; };
-  const open = (slides, i) => { list = slides; lb.classList.toggle('single', slides.length === 1); show(i); lb.showModal(); };
-  lb.querySelector('.dlg-close').addEventListener('click', () => lb.close());
-  lb.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1));
-  lb.querySelector('.lb-next').addEventListener('click', () => show(idx + 1));
-  lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
-  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
+  // Slides glide in from the side they come from; neighbours are preloaded so changes are instant.
+  const show = (i, dir = 0) => {
+    idx = (i + list.length) % list.length;
+    img.src = list[idx];
+    count.textContent = list.length > 1 ? `${idx + 1} / ${list.length}` : '';
+    if (dir && !reduce) img.animate([{ opacity: 0, transform: `translateX(${dir * 60}px) scale(.97)` }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16, 1, .3, 1)' });
+    [list[(idx + 1) % list.length], list[(idx - 1 + list.length) % list.length]].forEach(s => { const p = new Image(); p.src = s; });
+  };
+  // The viewer grows out of the post you clicked, and shrinks away when closed.
+  const open = (slides, i, from) => {
+    list = slides; lb.classList.toggle('single', slides.length === 1); lb.classList.remove('anim-out');
+    if (from) { const r = from.getBoundingClientRect(); lb.style.setProperty('--dx', `${r.left + r.width / 2 - innerWidth / 2}px`); lb.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`); }
+    show(i); lb.showModal();
+  };
+  const closeLB = () => { if (!lb.open || lb.classList.contains('anim-out')) return; lb.classList.add('anim-out'); setTimeout(() => { lb.classList.remove('anim-out'); lb.close(); }, 230); };
+  lb.querySelector('.dlg-close').addEventListener('click', closeLB);
+  lb.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1, -1));
+  lb.querySelector('.lb-next').addEventListener('click', () => show(idx + 1, 1));
+  lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
+  lb.addEventListener('cancel', e => { e.preventDefault(); closeLB(); });
+  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1, -1); if (e.key === 'ArrowRight') show(idx + 1, 1); });
+  let sx = null;
+  img.addEventListener('pointerdown', e => { sx = e.clientX; });
+  img.addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40 && list.length > 1) show(idx + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
 
   document.querySelectorAll('.ig[data-prefix]').forEach(async ig => {
     let posts = [];
@@ -201,7 +218,7 @@
       b.setAttribute('aria-label', `Open post ${i + 1}` + (slides.length > 1 ? ` (${slides.length} images)` : ''));
       b.innerHTML = slides.slice(0, 3).map((s, k) => `<img src="${s}" alt="" loading="lazy" draggable="false" style="--k:${k}">`).reverse().join('')
         + (slides.length > 1 ? `<span class="ig-badge">⧉ ${slides.length}</span>` : '');
-      b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } open(slides, 0); });
+      b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } open(slides, 0, b); });
       belt.appendChild(b);
     });
     makeSet(false);
@@ -213,7 +230,7 @@
     const cards = [...belt.children];
 
     let offset = 0, v = 0, pending = 0, paused = false, dragging = false, startX = 0, startOffset = 0;
-    const SPEED = reduce ? 0 : 32; // pixels per second
+    const SPEED = reduce ? 0 : 58; // pixels per second
     const cardStep = () => cards[0].offsetWidth + GAP;
     ig.addEventListener('mouseenter', () => { paused = true; });
     ig.addEventListener('mouseleave', () => { paused = false; });
