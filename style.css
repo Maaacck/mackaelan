@@ -327,3 +327,11 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 .project svg, .hero-photo, .project-dialog, .dlg-main, .dlg-thumbs button,
 .email-list, .email-list a, .resume-frame iframe { border-radius: 0; }
 .btn, .tags li, .badge, .dlg-close { border-radius: 0; }
+
+/* ---------- Smaller projects grid ---------- */
+.small-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.project.small { grid-template-columns: 1fr; gap: 14px; align-items: start; align-content: start; padding: 18px; }
+.project.small svg { order: -1; }
+.project.small h3 { font-size: 1.1rem; }
+.project.small p { margin-bottom: 10px; }
+.project.small .go { margin-top: 10px; }

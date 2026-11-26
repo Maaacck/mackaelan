@@ -36,7 +36,10 @@
     </div>
   </header>
   <section class="block">
-    <div class="wrap entries">
+    <div class="wrap">
+      <h2>Big projects</h2>
+      <p class="sub">Longer builds I took from design all the way to a working result.</p>
+      <div class="entries">
       <article class="card project" data-project="hexapod" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: Bioinspired Hexapod Robot">
         <div>
           <p class="kicker">Robotics</p>
@@ -84,7 +87,16 @@
             </g>
           </svg>
       </article>
-      <article class="card project" data-project="claw" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: 3-Pronged Robotic Claw">
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <h2>Smaller projects</h2>
+      <p class="sub">Quicker builds and experiments.</p>
+      <div class="small-grid">
+      <article class="card project small" data-project="claw" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: 3-Pronged Robotic Claw">
         <div>
           <p class="kicker">Robotics</p>
           <h3>3-Pronged Robotic Claw</h3>
@@ -105,6 +117,49 @@
             <circle cx="180" cy="86" r="8" fill="#16144a"/>
           </svg>
       </article>
+      <article class="card project small" data-project="cd-stand" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: CD Stand">
+        <div>
+          <p class="kicker">Design &amp; fabrication</p>
+          <h3>CD Stand</h3>
+          <p>A stand for displaying CDs.</p>
+          <ul class="tags"><li>CAD</li><li>3D printing</li></ul>
+          <span class="go">View details &amp; photos →</span>
+        </div>
+        <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a CD stand holding discs">
+            <rect width="360" height="220" fill="#16144a"/>
+            <rect x="70" y="170" width="220" height="16" fill="#8f5bff"/>
+            <rect x="86" y="70" width="10" height="100" fill="#8f5bff"/>
+            <rect x="264" y="70" width="10" height="100" fill="#8f5bff"/>
+            <g fill="none" stroke-width="5">
+              <circle cx="140" cy="112" r="44" stroke="#2f8cff"/>
+              <circle cx="190" cy="112" r="44" stroke="#ee8cff"/>
+              <circle cx="240" cy="112" r="44" stroke="#2f8cff"/>
+            </g>
+            <g fill="#16144a" stroke="#ee8cff" stroke-width="3"><circle cx="140" cy="112" r="9"/><circle cx="190" cy="112" r="9"/><circle cx="240" cy="112" r="9"/></g>
+          </svg>
+      </article>
+      <article class="card project small" data-project="bear" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: 3D-Printed Bear">
+        <div>
+          <p class="kicker">3D printing</p>
+          <h3>3D-Printed Bear</h3>
+          <p>A bear modeled and 3D-printed.</p>
+          <ul class="tags"><li>CAD</li><li>3D printing</li></ul>
+          <span class="go">View details &amp; photos →</span>
+        </div>
+        <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a 3D-printed bear">
+            <rect width="360" height="220" fill="#16144a"/>
+            <g stroke="#ee8cff" stroke-width="2" opacity=".35"><line x1="110" y1="196" x2="250" y2="196"/><line x1="120" y1="204" x2="240" y2="204"/></g>
+            <circle cx="140" cy="58" r="22" fill="#8f5bff"/>
+            <circle cx="220" cy="58" r="22" fill="#8f5bff"/>
+            <circle cx="180" cy="100" r="62" fill="#8f5bff"/>
+            <ellipse cx="180" cy="122" rx="28" ry="20" fill="#ee8cff"/>
+            <circle cx="158" cy="92" r="7" fill="#16144a"/>
+            <circle cx="202" cy="92" r="7" fill="#16144a"/>
+            <ellipse cx="180" cy="114" rx="9" ry="6" fill="#16144a"/>
+            <rect x="140" y="160" width="80" height="36" fill="#8f5bff"/>
+          </svg>
+      </article>
+      </div>
     </div>
   </section>
 
@@ -210,6 +265,72 @@
           </ul>
       <h4>Built with</h4>
       <ul class="tags"><li>Robotics</li><li>Robotic design</li><li>CAD</li></ul>
+    </div>
+  </dialog>
+  <dialog class="project-dialog" id="dlg-cd-stand" aria-labelledby="dlg-cd-stand-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-photos="images/cd-stand-">
+      <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a CD stand holding discs">
+            <rect width="360" height="220" fill="#16144a"/>
+            <rect x="70" y="170" width="220" height="16" fill="#8f5bff"/>
+            <rect x="86" y="70" width="10" height="100" fill="#8f5bff"/>
+            <rect x="264" y="70" width="10" height="100" fill="#8f5bff"/>
+            <g fill="none" stroke-width="5">
+              <circle cx="140" cy="112" r="44" stroke="#2f8cff"/>
+              <circle cx="190" cy="112" r="44" stroke="#ee8cff"/>
+              <circle cx="240" cy="112" r="44" stroke="#2f8cff"/>
+            </g>
+            <g fill="#16144a" stroke="#ee8cff" stroke-width="3"><circle cx="140" cy="112" r="9"/><circle cx="190" cy="112" r="9"/><circle cx="240" cy="112" r="9"/></g>
+          </svg></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Design &amp; fabrication</p>
+      <h3 id="dlg-cd-stand-title">CD Stand</h3>
+      <p class="dlg-overview">Placeholder: a short overview of the project and why you made it.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you designed it.</li>
+          </ul>
+          <h4>Build</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you made it.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>CAD</li><li>3D printing</li></ul>
+    </div>
+  </dialog>
+  <dialog class="project-dialog" id="dlg-bear" aria-labelledby="dlg-bear-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-photos="images/bear-">
+      <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a 3D-printed bear">
+            <rect width="360" height="220" fill="#16144a"/>
+            <g stroke="#ee8cff" stroke-width="2" opacity=".35"><line x1="110" y1="196" x2="250" y2="196"/><line x1="120" y1="204" x2="240" y2="204"/></g>
+            <circle cx="140" cy="58" r="22" fill="#8f5bff"/>
+            <circle cx="220" cy="58" r="22" fill="#8f5bff"/>
+            <circle cx="180" cy="100" r="62" fill="#8f5bff"/>
+            <ellipse cx="180" cy="122" rx="28" ry="20" fill="#ee8cff"/>
+            <circle cx="158" cy="92" r="7" fill="#16144a"/>
+            <circle cx="202" cy="92" r="7" fill="#16144a"/>
+            <ellipse cx="180" cy="114" rx="9" ry="6" fill="#16144a"/>
+            <rect x="140" y="160" width="80" height="36" fill="#8f5bff"/>
+          </svg></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">3D printing</p>
+      <h3 id="dlg-bear-title">3D-Printed Bear</h3>
+      <p class="dlg-overview">Placeholder: a short overview of the project and why you made it.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you designed it.</li>
+          </ul>
+          <h4>Build</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you made it.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>CAD</li><li>3D printing</li></ul>
     </div>
   </dialog>
 <script>
