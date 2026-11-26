@@ -303,6 +303,8 @@
       <p class="kicker">3D printing</p>
       <h3 id="dlg-bear-title">3D-Printed Bear</h3>
       <p class="dlg-overview">Placeholder: a short overview of the project and why you made it.</p>
+      <h4>Spin the 3D model</h4>
+      <div class="model3d" data-model="models/bear.mesh" role="img" aria-label="Interactive 3D model of the bear. Drag to rotate, scroll to zoom."><span class="model3d-hint">Drag to rotate · scroll to zoom</span></div>
           <h4>Design</h4>
           <ul class="points">
             <li class="ph">Placeholder: how you designed it.</li>
@@ -496,6 +498,16 @@ document.addEventListener('click', e => { const d = document.querySelector('.ema
 })();
 </script>
 </div>
+<style>
+.model3d{position:relative;height:340px;margin:.5rem 0 1.25rem;border-radius:14px;background:radial-gradient(ellipse at 50% 40%,#2a2470,#16144a 70%);overflow:hidden;cursor:grab;touch-action:none}
+.model3d:active{cursor:grabbing}
+.model3d canvas{display:block;width:100%;height:100%}
+.model3d-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-size:.78rem;color:#f4eaff;background:rgba(22,20,74,.7);padding:.25rem .6rem;border-radius:999px;pointer-events:none;transition:opacity .4s}
+.model3d.touched .model3d-hint{opacity:0}
+.model3d:not(.ready):not(.failed)::before{content:"Loading 3D model…";position:absolute;inset:0;display:grid;place-items:center;color:#cfc6ff;font-size:.9rem}
+.model3d.failed::before{content:"3D model couldn\2019t load in this browser.";position:absolute;inset:0;display:grid;place-items:center;color:#cfc6ff;font-size:.9rem}
+</style>
+<script type="module" src="model3d.js"></script>
 <script src="cursor.js" defer></script>
 </body>
 </html>
