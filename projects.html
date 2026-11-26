@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Mackaelan Songco</title>
+<meta name="description" content="Personal projects by Mackaelan Songco.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">Mackaelan Songco<span>.</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="leadership.html">Leadership</a></li>
+      <li><a href="projects.html" aria-current="page">Projects</a></li>
+      <li><a href="education.html">Education & Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Projects</p>
+      <h1>Projects</h1>
+      <p class="lede">Things I've designed and built on my own time.</p>
+    </div>
+  </header>
+  <section class="block">
+    <div class="wrap entries">
+      <article class="card project">
+        <div>
+          <p class="kicker">Robotics</p>
+          <h3>Bioinspired Hexapod Robot</h3>
+          <p class="meta" style="font-family:var(--mono);font-size:.8rem;">May 2025 – Oct 2025</p>
+          <p>An insect-inspired six-legged walking robot.</p>
+          <ul class="points" style="padding-left:20px;margin:0 0 14px;">
+              <li>Designed the body and legs in Fusion 360 and 3D-printed every part.</li>
+              <li>Programmed it in C++ using a Teensy and a Raspberry Pi.</li>
+          </ul>
+          <ul class="tags"><li>C++</li><li>Teensy</li><li>Raspberry Pi</li><li>Fusion 360</li><li>3D printing</li></ul>
+        </div>
+        <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
+            <rect width="360" height="220" fill="#1b2a44"/>
+            <g stroke="#f2c94c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+              <polyline points="140,85 95,55 70,95"/>
+              <polyline points="140,110 85,110 60,155"/>
+              <polyline points="140,135 95,165 75,195"/>
+              <polyline points="220,85 265,55 290,95"/>
+              <polyline points="220,110 275,110 300,155"/>
+              <polyline points="220,135 265,165 285,195"/>
+            </g>
+            <rect x="130" y="70" width="100" height="80" rx="22" fill="#8fb8ff"/>
+            <rect x="152" y="92" width="56" height="36" rx="6" fill="#1b2a44"/>
+            <circle cx="168" cy="110" r="5" fill="#f2c94c"/>
+            <circle cx="192" cy="110" r="5" fill="#f2c94c"/>
+            <g fill="#f2c94c"><circle cx="70" cy="95" r="5"/><circle cx="60" cy="155" r="5"/><circle cx="75" cy="195" r="5"/><circle cx="290" cy="95" r="5"/><circle cx="300" cy="155" r="5"/><circle cx="285" cy="195" r="5"/></g>
+          </svg>
+      </article>
+      <article class="card project">
+        <div>
+          <p class="kicker">Audio hardware</p>
+          <h3>Custom Headphones</h3>
+          <p class="meta" style="font-family:var(--mono);font-size:.8rem;">Aug 2026 – Sep 2026</p>
+          <p>A pair of headphones built from scratch.</p>
+          <ul class="points" style="padding-left:20px;margin:0 0 14px;">
+              <li>Modeled the case and clips in Fusion 360 and printed them in PLA, ABS, and PETG.</li>
+              <li>Soldered the drivers to 0.78 mm 2-pin connectors.</li>
+          </ul>
+          <ul class="tags"><li>Fusion 360</li><li>3D printing</li><li>Soldering</li></ul>
+        </div>
+        <svg viewBox="0 0 360 220" role="img" aria-label="Illustration of over-ear headphones">
+            <rect width="360" height="220" fill="#2a2614"/>
+            <path d="M95 140 V110 a85 85 0 0 1 170 0 V140" fill="none" stroke="#8fb8ff" stroke-width="12" stroke-linecap="round"/>
+            <rect x="70" y="120" width="50" height="76" rx="18" fill="#f2c94c"/>
+            <rect x="240" y="120" width="50" height="76" rx="18" fill="#f2c94c"/>
+            <rect x="82" y="134" width="26" height="48" rx="10" fill="#2a2614" opacity=".35"/>
+            <rect x="252" y="134" width="26" height="48" rx="10" fill="#2a2614" opacity=".35"/>
+            <g stroke="#8fb8ff" stroke-width="3" fill="none" opacity=".8">
+              <path d="M300 150 q20 0 22 20"/><path d="M300 135 q36 0 38 36"/>
+            </g>
+          </svg>
+      </article>
+    </div>
+  </section>
+</main>
+<div class="wrap next"><a href="education.html">Next: Education &amp; Skills →</a></div>
+
+<footer id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Get in touch</h2>
+      <p class="sub">Always happy to talk hardware, robotics, physics, or research.</p>
+    </div>
+    <div class="links">
+      <a class="btn primary" href="mailto:mackaelansongco@berkeley.edu">Berkeley email</a>
+      <a class="btn" href="mailto:mackaelansongco@gmail.com">Gmail</a>
+      <a class="btn" href="https://www.linkedin.com/in/mackaelan-songco-5a1137248/">LinkedIn</a>
+      <a class="btn" href="https://github.com/Maaacck">GitHub</a>
+    </div>
+    <p class="small">© <span class="yr">2026</span> Mackaelan Songco · Berkeley, CA</p>
+  </div>
+</footer>
+<script>document.querySelectorAll('.yr').forEach(e => e.textContent = new Date().getFullYear());</script>
+</body>
+</html>
