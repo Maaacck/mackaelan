@@ -482,3 +482,5 @@ main.pt-out { animation: page-out .22s cubic-bezier(.4, 0, 1, 1) both; pointer-e
 .pie-photo:hover img, .pie-photo:focus-visible img { transform: scale(1.04); }
 @media (max-width: 560px) { .pie-photos { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .pie-photo img { transition: none; } }
+
+.pie-photos.single { grid-template-columns: 1fr; max-width: 560px; }

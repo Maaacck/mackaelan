@@ -148,6 +148,9 @@
         <ul class="points">
           <li class="ph">Placeholder: add details about this role.</li>
         </ul>
+        <div class="pie-photos single">
+          <button type="button" class="pie-photo" aria-label="Enlarge Cal Hacks volunteer photo"><img src="images/calhacks-1.avif" alt="Four Cal Hacks volunteers posing in the event hall, two of them carrying a third" width="960" height="600" loading="lazy" draggable="false"></button>
+        </div>
         <ul class="tags"><li>Events</li></ul>
       </article>
       <article class="entry">
@@ -210,9 +213,11 @@
   img.addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40 && list.length > 1) show(idx + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
 
   // Team photos open in the same viewer as the Instagram posts.
-  const photos = [...document.querySelectorAll('.pie-photo')];
-  const photoSrcs = photos.map(b => b.querySelector('img').src);
-  photos.forEach((b, i) => b.addEventListener('click', () => open(photoSrcs, i, b)));
+  document.querySelectorAll('.pie-photos').forEach(group => {
+    const photos = [...group.querySelectorAll('.pie-photo')];
+    const srcs = photos.map(b => b.querySelector('img').src);
+    photos.forEach((b, i) => b.addEventListener('click', () => open(srcs, i, b)));
+  });
 
   document.querySelectorAll('.ig[data-prefix]').forEach(async ig => {
     // Slide counts for each @pierobotics post, oldest (July 24, 2026) first: images/pie-post-{post}-{slide}.webp
