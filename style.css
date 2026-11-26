@@ -484,3 +484,13 @@ main.pt-out { animation: page-out .22s cubic-bezier(.4, 0, 1, 1) both; pointer-e
 @media (prefers-reduced-motion: reduce) { .pie-photo img { transition: none; } }
 
 .pie-photos.single { grid-template-columns: 1fr; max-width: 560px; }
+
+/* Photo cards, captions and video in the project gallery */
+.project.small .proj-shot { order: -1; width: 100%; height: auto; aspect-ratio: 360 / 220; object-fit: cover; display: block; border: 1px solid rgba(238, 140, 255, .22); }
+.pie-photo { position: relative; }
+.pie-photo .cap { position: absolute; left: 10px; bottom: 10px; padding: 4px 10px; background: rgba(10, 6, 30, .72); color: #fff; font-size: .78rem; font-weight: 700; letter-spacing: .04em; pointer-events: none; }
+.dlg-main.is-video { position: relative; background: #000; }
+.dlg-main.is-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+.dlg-thumbs button.vid { position: relative; }
+.dlg-thumbs button video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.dlg-thumbs button .play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 1.1rem; text-shadow: 0 1px 6px rgba(0, 0, 0, .8); pointer-events: none; }

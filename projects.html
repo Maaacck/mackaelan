@@ -157,13 +157,33 @@
             <rect x="140" y="160" width="80" height="36" fill="#8f5bff"/>
           </svg>
       </article>
+      <article class="card project small" data-project="wedge" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: The Wedge">
+        <div>
+          <p class="kicker">Combat robotics</p>
+          <h3>The Wedge</h3>
+          <p>A 3D-printed combat robot built with Combat Robotics at Berkeley.</p>
+          <ul class="tags"><li>Combat robotics</li><li>CAD</li><li>3D printing</li></ul>
+          <span class="go">View details &amp; photos →</span>
+        </div>
+        <img class="proj-shot" src="images/combat-wedge.avif" alt="The Wedge, a yellow 3D-printed combat robot" width="960" height="600" loading="lazy">
+      </article>
+      <article class="card project small" data-project="ourple" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open details: Ourple">
+        <div>
+          <p class="kicker">Combat robotics</p>
+          <h3>Ourple</h3>
+          <p>An aluminum-framed vertical-spinner combat robot built with Combat Robotics at Berkeley.</p>
+          <ul class="tags"><li>Combat robotics</li><li>CAD</li><li>Engineering design</li></ul>
+          <span class="go">View details &amp; photos →</span>
+        </div>
+        <img class="proj-shot" src="images/combat-ourple.avif" alt="Ourple, an aluminum combat robot with a vertical spinning weapon" width="960" height="600" loading="lazy">
+      </article>
       </div>
     </div>
   </section>
 
   <dialog class="project-dialog" id="dlg-hexapod" aria-labelledby="dlg-hexapod-title">
     <button class="dlg-close" type="button" aria-label="Close">✕</button>
-    <div class="dlg-gallery" data-photos="images/hexapod-">
+    <div class="dlg-gallery" data-list="images/hexapod-1.avif,images/hexapod-walk.mp4,images/hexapod-2.avif,images/hexapod-3.avif">
       <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
             <rect width="360" height="220" fill="#16144a"/>
             <g stroke="#ee8cff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -331,6 +351,50 @@
       <ul class="tags"><li>CAD</li><li>3D printing</li></ul>
     </div>
   </dialog>
+  <dialog class="project-dialog" id="dlg-wedge" aria-labelledby="dlg-wedge-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-list="images/combat-wedge.avif,images/combat-team-wedge.avif">
+      <div class="dlg-main"><img src="images/combat-wedge.avif" alt="The Wedge"></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Combat robotics · Combat Robotics at Berkeley</p>
+      <h3 id="dlg-wedge-title">The Wedge</h3>
+      <p class="dlg-overview">Placeholder: a short overview of The Wedge, its weight class, and how it fights.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you designed it.</li>
+          </ul>
+          <h4>Build &amp; competition</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you built it and how it did.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>Combat robotics</li><li>CAD</li><li>3D printing</li></ul>
+    </div>
+  </dialog>
+  <dialog class="project-dialog" id="dlg-ourple" aria-labelledby="dlg-ourple-title">
+    <button class="dlg-close" type="button" aria-label="Close">✕</button>
+    <div class="dlg-gallery" data-list="images/combat-ourple.avif,images/combat-team-ourple.avif">
+      <div class="dlg-main"><img src="images/combat-ourple.avif" alt="Ourple"></div>
+      <div class="dlg-thumbs"></div>
+    </div>
+    <div class="dlg-body">
+      <p class="kicker">Combat robotics · Combat Robotics at Berkeley</p>
+      <h3 id="dlg-ourple-title">Ourple</h3>
+      <p class="dlg-overview">Placeholder: a short overview of Ourple, its weight class, and how it fights.</p>
+          <h4>Design</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you designed it.</li>
+          </ul>
+          <h4>Build &amp; competition</h4>
+          <ul class="points">
+            <li class="ph">Placeholder: how you built it and how it did.</li>
+          </ul>
+      <h4>Built with</h4>
+      <ul class="tags"><li>Combat robotics</li><li>CAD</li><li>Engineering design</li></ul>
+    </div>
+  </dialog>
 <script>
 (() => {
   const EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
@@ -339,16 +403,26 @@
   async function loadGallery(g) {
     if (g.dataset.loaded) return; g.dataset.loaded = '1';
     const main = g.querySelector('.dlg-main'), thumbs = g.querySelector('.dlg-thumbs');
-    const fallback = main.innerHTML; const photos = [];
-    for (let i = 1; i <= 12; i++) { const s = await findPhoto(g.dataset.photos, i); if (!s) break; photos.push(s); }
+    const fallback = main.innerHTML; let photos = [];
+    if (g.dataset.list) photos = g.dataset.list.split(',').map(s => s.trim()).filter(Boolean);
+    else for (let i = 1; i <= 12; i++) { const s = await findPhoto(g.dataset.photos, i); if (!s) break; photos.push(s); }
     if (!photos.length) return;
+    const isVid = s => /\.(mp4|webm|mov)$/i.test(s);
     const show = (s, btn) => {
-      main.innerHTML = `<img src="${s}" alt="">`;
+      main.classList.toggle('is-video', isVid(s));
+      main.innerHTML = isVid(s)
+        ? `<video src="${s}" autoplay muted loop playsinline controls></video>`
+        : `<img src="${s}" alt="">`;
       thumbs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
     };
     photos.forEach((s, i) => {
-      const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', `Photo ${i + 1}`);
-      b.innerHTML = `<img src="${s}" alt="">`; b.onclick = () => show(s, b); thumbs.appendChild(b);
+      const b = document.createElement('button'); b.type = 'button';
+      b.setAttribute('aria-label', isVid(s) ? `Video ${i + 1}` : `Photo ${i + 1}`);
+      b.innerHTML = isVid(s)
+        ? `<video src="${s}#t=0.5" muted playsinline preload="metadata"></video><span class="play" aria-hidden="true">▶</span>`
+        : `<img src="${s}" alt="">`;
+      if (isVid(s)) b.classList.add('vid');
+      b.onclick = () => show(s, b); thumbs.appendChild(b);
       if (i === 0) show(s, b);
     });
     if (photos.length === 1) thumbs.hidden = true;
@@ -361,6 +435,7 @@
       dlg.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`);
       dlg.classList.remove('anim-out'); dlg.classList.add('anim-in');
       dlg.showModal(); loadGallery(dlg.querySelector('.dlg-gallery'));
+      dlg.querySelectorAll('.dlg-main video').forEach(v => v.play().catch(() => {}));
     };
     card.addEventListener('click', open);
     card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
@@ -368,7 +443,7 @@
   const closeDlg = d => {
     if (!d.open || d.classList.contains('anim-out')) return;
     d.classList.remove('anim-in'); d.classList.add('anim-out');
-    const done = () => { clearTimeout(t); d.removeEventListener('animationend', onEnd); d.classList.remove('anim-out'); d.close(); };
+    const done = () => { d.querySelectorAll('video').forEach(v => v.pause()); clearTimeout(t); d.removeEventListener('animationend', onEnd); d.classList.remove('anim-out'); d.close(); };
     const onEnd = e => { if (e.target === d && e.animationName === 'dlg-out' && !e.pseudoElement) done(); };
     const t = setTimeout(done, 400);
     d.addEventListener('animationend', onEnd);
@@ -381,6 +456,7 @@
 })();
 </script>
 </main>
+
 
 <footer id="contact">
   <div class="wrap">
