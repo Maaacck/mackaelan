@@ -41,14 +41,14 @@ html::before, body::before, body::after {
 }
 html::before {
   z-index: -3;
-  background: url("background.png") center / cover no-repeat,
+  background: url("Background.png") center / cover no-repeat,
               linear-gradient(180deg, #3a1fd9 0%, #2424ff 45%, #7b3cff 62%, #c0398f 70%, #1c1c3a 78%, #14142e 100%);
   filter: blur(18px) brightness(.55) saturate(1.1);
   transform: scale(1.1);
 }
 body::before {
   z-index: -2;
-  background: url("background.png") right center / auto 100% no-repeat;
+  background: url("Background.png") right center / auto 100% no-repeat;
   image-rendering: pixelated;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent calc(100% - 100vh * .658), #000 calc(100% - 100vh * .658 + 260px));
           mask-image: linear-gradient(90deg, transparent 0, transparent calc(100% - 100vh * .658), #000 calc(100% - 100vh * .658 + 260px));
