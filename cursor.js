@@ -1,25 +1,22 @@
-// Page transitions for browsers without cross-page View Transitions (those use CSS instead):
-// the content fades up on arrival and fades out before leaving for another page of the site.
+// Page transitions: when a link goes to another page of the site, the violet and pink bands
+// (main::before / main::after in style.css) wipe in to cover the content, then the next page loads
+// and wipes open.
 (() => {
-  if ('onpagereveal' in window || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const main = document.querySelector('main');
-  if (!main) return;
-  main.classList.add('pt-in');
-  main.addEventListener('animationend', () => main.classList.remove('pt-in'), { once: true });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const root = document.documentElement;
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href]');
     if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     if (a.target && a.target !== '_self') return;
-    if (a.hasAttribute('download') || a.hasAttribute('data-open-resume')) return;
+    if (a.hasAttribute('download') || a.hasAttribute('data-open-resume') || a.hasAttribute('data-open-poster')) return;
     const url = new URL(a.href, location.href);
     if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname)) return;
-    if (url.pathname === location.pathname && url.hash) return;
+    if (url.pathname === location.pathname) return;
     e.preventDefault();
-    main.classList.remove('pt-in');
-    main.classList.add('pt-out');
-    setTimeout(() => { location.href = url.href; }, 210);
+    root.classList.add('wipe-out');
+    setTimeout(() => { location.href = url.href; }, 470);
   });
-  addEventListener('pageshow', e => { if (e.persisted) main.classList.remove('pt-out'); });
+  addEventListener('pageshow', e => { if (e.persisted) root.classList.remove('wipe-out'); });
 })();
 
 // Themed custom cursor: a pink pixel dot, a violet square that trails behind and

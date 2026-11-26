@@ -456,23 +456,21 @@ html:has(dialog[open]) .cursor-dot, html:has(dialog[open]) .cursor-ring { opacit
 @media (prefers-reduced-motion: reduce) { .ig-profile, .ig-profile img { transition: none; } }
 
 /* ---------- Page transitions ---------- */
-/* Browsers with cross-page View Transitions: the sidebar and background stay put while the page content swaps. */
-@view-transition { navigation: auto; }
-.sidebar { view-transition-name: sidebar; }
-main { view-transition-name: page; }
-::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(page) { animation: none; }
-::view-transition-group(sidebar) { animation-duration: .3s; }
-::view-transition-old(page) { animation: page-out .22s cubic-bezier(.4, 0, 1, 1) both; }
-::view-transition-new(page) { animation: page-in .55s cubic-bezier(.16, 1, .3, 1) .06s both; }
-@keyframes page-out { to { opacity: 0; transform: translateY(-14px); filter: blur(4px); } }
-@keyframes page-in { from { opacity: 0; transform: translateY(22px); filter: blur(5px); } }
-/* Other browsers: the same motion, driven by a small script in cursor.js. */
-main.pt-in { animation: page-in .55s cubic-bezier(.16, 1, .3, 1) both; }
-main.pt-out { animation: page-out .22s cubic-bezier(.4, 0, 1, 1) both; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
-  main.pt-in, main.pt-out { animation: none; }
+/* Page transition: a violet band and then a pink band wipe across the content area
+   (the sidebar stays put). Arriving pages start covered and wipe open; cursor.js covers
+   the page again before leaving for another page of the site. */
+main::before, main::after {
+  content: ""; position: fixed; top: 0; bottom: 0; left: var(--sidebar); right: 0;
+  z-index: 9; pointer-events: none; clip-path: inset(0 0 0 100%);
 }
+main::before { background: var(--violet); animation: wipe-off .45s cubic-bezier(.7, 0, .3, 1) .08s both; }
+main::after { background: var(--sunset); animation: wipe-off .45s cubic-bezier(.7, 0, .3, 1) both; }
+html.wipe-out main::before { animation: wipe-on .38s cubic-bezier(.7, 0, .3, 1) both; }
+html.wipe-out main::after { animation: wipe-on .38s cubic-bezier(.7, 0, .3, 1) .07s both; }
+@keyframes wipe-on { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+@keyframes wipe-off { from { clip-path: inset(0); } to { clip-path: inset(0 0 0 100%); } }
+@media (max-width: 860px) { main::before, main::after { left: 0; } }
+@media (prefers-reduced-motion: reduce) { main::before, main::after { display: none; } }
 
 /* ---------- PiE team photos ---------- */
 .pie-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 6px 0 20px; }
