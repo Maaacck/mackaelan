@@ -183,7 +183,7 @@
 
   <dialog class="project-dialog" id="dlg-hexapod" aria-labelledby="dlg-hexapod-title">
     <button class="dlg-close" type="button" aria-label="Close">✕</button>
-    <div class="dlg-gallery" data-list="images/hexapod-1.avif,images/hexapod-walk.mp4,images/hexapod-2.avif,images/hexapod-3.avif">
+    <div class="dlg-gallery" data-list="images/hexapod-1.avif,yt:eR1gQSE8qtw,images/hexapod-2.avif,images/hexapod-3.avif">
       <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
             <rect width="360" height="220" fill="#16144a"/>
             <g stroke="#ee8cff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -407,10 +407,13 @@
     if (g.dataset.list) photos = g.dataset.list.split(',').map(s => s.trim()).filter(Boolean);
     else for (let i = 1; i <= 12; i++) { const s = await findPhoto(g.dataset.photos, i); if (!s) break; photos.push(s); }
     if (!photos.length) return;
-    const isVid = s => /\.(mp4|webm|mov)$/i.test(s);
+    const isYT = s => s.startsWith('yt:');
+    const isVid = s => isYT(s) || /\.(mp4|webm|mov)$/i.test(s);
     const show = (s, btn) => {
       main.classList.toggle('is-video', isVid(s));
-      main.innerHTML = isVid(s)
+      main.innerHTML = isYT(s)
+        ? `<iframe src="https://www.youtube-nocookie.com/embed/${s.slice(3)}?rel=0&playsinline=1" title="Project video on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+        : isVid(s)
         ? `<video src="${s}" autoplay muted loop playsinline controls></video>`
         : `<img src="${s}" alt="">`;
       thumbs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
@@ -418,7 +421,9 @@
     photos.forEach((s, i) => {
       const b = document.createElement('button'); b.type = 'button';
       b.setAttribute('aria-label', isVid(s) ? `Video ${i + 1}` : `Photo ${i + 1}`);
-      b.innerHTML = isVid(s)
+      b.innerHTML = isYT(s)
+        ? `<img src="https://i.ytimg.com/vi/${s.slice(3)}/hqdefault.jpg" alt=""><span class="play" aria-hidden="true">▶</span>`
+        : isVid(s)
         ? `<video src="${s}#t=0.5" muted playsinline preload="metadata"></video><span class="play" aria-hidden="true">▶</span>`
         : `<img src="${s}" alt="">`;
       if (isVid(s)) b.classList.add('vid');
@@ -443,7 +448,7 @@
   const closeDlg = d => {
     if (!d.open || d.classList.contains('anim-out')) return;
     d.classList.remove('anim-in'); d.classList.add('anim-out');
-    const done = () => { d.querySelectorAll('video').forEach(v => v.pause()); clearTimeout(t); d.removeEventListener('animationend', onEnd); d.classList.remove('anim-out'); d.close(); };
+    const done = () => { d.querySelectorAll('video').forEach(v => v.pause()); d.querySelectorAll('.dlg-main iframe').forEach(f => { f.src = f.src; }); clearTimeout(t); d.removeEventListener('animationend', onEnd); d.classList.remove('anim-out'); d.close(); };
     const onEnd = e => { if (e.target === d && e.animationName === 'dlg-out' && !e.pseudoElement) done(); };
     const t = setTimeout(done, 400);
     d.addEventListener('animationend', onEnd);
@@ -453,6 +458,15 @@
     d.addEventListener('click', e => { if (e.target === d) closeDlg(d); });
     d.addEventListener('cancel', e => { e.preventDefault(); closeDlg(d); });
   });
+  // Links like projects.html#wedge open that project's details.
+  const fromHash = () => {
+    const card = location.hash && document.querySelector(`.project[data-project="${CSS.escape(location.hash.slice(1))}"]`);
+    if (!card) return;
+    card.scrollIntoView({ block: 'center' });
+    setTimeout(() => card.click(), 450);
+  };
+  if (document.readyState === 'complete') fromHash(); else addEventListener('load', fromHash);
+  addEventListener('hashchange', fromHash);
 })();
 </script>
 </main>

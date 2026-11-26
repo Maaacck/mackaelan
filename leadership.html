@@ -130,10 +130,10 @@
           <li class="ph">Placeholder: add details about this role.</li>
         </ul>
         <div class="pie-photos">
-          <button type="button" class="pie-photo" aria-label="Enlarge photo of The Wedge"><img src="images/combat-wedge.avif" alt="The Wedge, a yellow 3D-printed combat robot with a black arm, on a workbench" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge</span></button>
-          <button type="button" class="pie-photo" aria-label="Enlarge photo of Ourple"><img src="images/combat-ourple.avif" alt="Ourple, an aluminum combat robot with a vertical spinning weapon, open to show its wiring" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple</span></button>
-          <button type="button" class="pie-photo" aria-label="Enlarge photo of The Wedge team"><img src="images/combat-team-wedge.avif" alt="Four team members posing with The Wedge" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge team</span></button>
-          <button type="button" class="pie-photo" aria-label="Enlarge photo of the Ourple team"><img src="images/combat-team-ourple.avif" alt="Four team members posing with Ourple and its radio controller" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple team</span></button>
+          <a class="pie-photo" href="projects.html#wedge" aria-label="See The Wedge in Projects"><img src="images/combat-wedge.avif" alt="The Wedge, a yellow 3D-printed combat robot with a black arm, on a workbench" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge →</span></a>
+          <a class="pie-photo" href="projects.html#ourple" aria-label="See Ourple in Projects"><img src="images/combat-ourple.avif" alt="Ourple, an aluminum combat robot with a vertical spinning weapon, open to show its wiring" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple →</span></a>
+          <a class="pie-photo" href="projects.html#wedge" aria-label="See The Wedge in Projects"><img src="images/combat-team-wedge.avif" alt="Four team members posing with The Wedge" width="960" height="600" loading="lazy" draggable="false"><span class="cap">The Wedge team →</span></a>
+          <a class="pie-photo" href="projects.html#ourple" aria-label="See Ourple in Projects"><img src="images/combat-team-ourple.avif" alt="Four team members posing with Ourple and its radio controller" width="960" height="600" loading="lazy" draggable="false"><span class="cap">Ourple team →</span></a>
         </div>
         <ul class="tags"><li>CAD</li><li>Engineering design</li><li>Combat robotics</li></ul>
       </article>
@@ -220,7 +220,7 @@
 
   // Team photos open in the same viewer as the Instagram posts.
   document.querySelectorAll('.pie-photos').forEach(group => {
-    const photos = [...group.querySelectorAll('.pie-photo')];
+    const photos = [...group.querySelectorAll('button.pie-photo')];
     const srcs = photos.map(b => b.querySelector('img').src);
     photos.forEach((b, i) => b.addEventListener('click', () => open(srcs, i, b)));
   });
