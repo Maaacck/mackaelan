@@ -7,13 +7,10 @@
   const layer = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.setAttribute('aria-hidden', 'true'); d.innerHTML = html; document.body.appendChild(d); return d; };
 
   layer('sky-clouds',
-    '<i class="c" style="width:900px;height:70px;top:10%;--dur:110s;--del:-44s;--bob:9s;--o:0.85"></i>' +
-    '<i class="c soft" style="width:700px;height:90px;top:18%;--dur:150s;--del:-112.5s;--bob:11s"></i>' +
-    '<i class="c" style="width:620px;height:50px;top:34%;--dur:125s;--del:-12.5s;--bob:8s;--o:0.7"></i>' +
-    '<i class="c" style="width:1100px;height:90px;top:52%;--dur:140s;--del:-77s;--bob:12s;--o:0.8"></i>' +
-    '<i class="c soft" style="width:900px;height:110px;top:60%;--dur:170s;--del:-34s;--bob:10s"></i>' +
-    '<i class="c" style="width:560px;height:44px;top:44%;--dur:100s;--del:-90s;--bob:7s;--o:0.6"></i>' +
-    '<i class="c" style="width:1000px;height:80px;top:72%;--dur:130s;--del:-39s;--bob:10s;--o:0.75"></i>');
+    '<i class="c" style="width:360px;height:34px;top:14%;--dur:150s;--del:-22.5s;--bob:9s;--o:0.85"></i>' +
+    '<i class="c soft" style="width:260px;height:26px;top:36%;--dur:175s;--del:-108.5s;--bob:11s"></i>' +
+    '<i class="c" style="width:300px;height:30px;top:58%;--dur:160s;--del:-64s;--bob:10s;--o:0.8"></i>' +
+    '<i class="c" style="width:220px;height:22px;top:78%;--dur:140s;--del:-123.2s;--bob:8s;--o:0.75"></i>');
 
   if (reduce) return;
   const delays = [.12, 0, .2, .06, .24, .1];
