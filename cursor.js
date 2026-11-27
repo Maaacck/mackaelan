@@ -59,7 +59,7 @@
   addEventListener('pointermove', e => { if (seen && (!e.pointerType || e.pointerType === 'mouse')) root.classList.add('cursor-on'); }, { passive: true });
 
   let x = -100, y = -100, rx = -100, ry = -100, lastX = 0, lastY = 0, seen = false;
-  const COLORS = ['#f6f4ff', '#ffffff', '#cfc8ff', '#9a8cff'];
+  const COLORS = ['#f6f4ff', '#d5dcf9', '#a09ff3', '#8874f4'];
   let pixels = 0;
 
   const spawn = (px, py) => {
