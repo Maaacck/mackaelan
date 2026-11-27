@@ -598,3 +598,11 @@ main .card, main .card *, main .entry, main .entry *, main .stat, main .stat *, 
 main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, main button, main dialog, main dialog *,
 .sidebar ul a[aria-current="page"] { text-shadow: none; }
 @media (max-width: 860px) { body::after { background: linear-gradient(180deg, rgba(36, 0, 190, .7), rgba(36, 0, 190, .5)); } }
+
+/* ---------- More visible clouds ---------- */
+/* The clouds sit above the darkening scrim (but still behind all content), in brighter lavender-white
+   with bolder dots, so they read clearly against the blue. */
+body::after { z-index: -2; }
+.sky-clouds .c { background: radial-gradient(closest-side, rgba(238, 240, 255, 1), rgba(226, 230, 253, .7) 50%, rgba(213, 220, 249, 0)); opacity: calc(var(--o, .8) * .75 + .2);
+  -webkit-mask: radial-gradient(circle, #000 1.25px, transparent 1.75px) 0 0 / 3.5px 3.5px; mask: radial-gradient(circle, #000 1.25px, transparent 1.75px) 0 0 / 3.5px 3.5px; }
+.sky-clouds .c.soft { -webkit-mask: none; mask: none; opacity: .4; filter: blur(5px); }
