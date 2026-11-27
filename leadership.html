@@ -432,6 +432,10 @@ document.addEventListener('click', e => { const d = document.querySelector('.ema
       let d;
       try { d = await build(a.hash.slice(1)); } catch { d = null; }
       if (!d) { location.href = a.href; return; }
+      // Start on the photo that was clicked (the robot or its team), without a slide animation.
+      const want = a.querySelector('img')?.getAttribute('src');
+      const pick = [...d.querySelectorAll('.dlg-thumbs button')].find(x => x.querySelector('img')?.getAttribute('src') === want);
+      if (pick) { d.querySelector('.dlg-gallery').removeAttribute('data-cur'); pick.click(); }
       const r = a.getBoundingClientRect();
       d.style.setProperty('--dx', `${r.left + r.width / 2 - innerWidth / 2}px`);
       d.style.setProperty('--dy', `${r.top + r.height / 2 - innerHeight / 2}px`);
