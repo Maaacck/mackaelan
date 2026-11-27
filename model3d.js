@@ -5,7 +5,7 @@ import * as THREE from 'https://esm.sh/three@0.160.0';
 import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'https://esm.sh/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
 
-const PALETTE = ['#C8805E', '#A0A0A0', '#4D2D20', '#391F19', '#F6C892'];
+const PALETTE = ['#C8805E', '#A0A0A0', '#4D2D20', '#391F19', '#F6C892', '#2E2E33'];
 
 export function decode(buf) {
   const dv = new DataView(buf);
