@@ -271,10 +271,20 @@
     let offset = 0, v = 0, pending = 0, paused = false, dragging = false, startX = 0, startOffset = 0;
     const SPEED = reduce ? 0 : 58; // pixels per second
     const cardStep = () => cards[0].offsetWidth + GAP;
-    ig.addEventListener('mouseenter', () => { paused = true; });
-    ig.addEventListener('mouseleave', () => { paused = false; });
-    ig.addEventListener('focusin', () => { paused = true; });
-    ig.addEventListener('focusout', () => { paused = false; });
+    // The belt pauses while the pointer is over it or a post has keyboard focus. Clicking a post
+    // leaves it focused, so focus from a mouse click doesn't count, and closing the viewer re-checks
+    // both so the belt starts moving again once you're done looking.
+    let hover = false, kbFocus = false;
+    const update = () => { paused = hover || kbFocus; };
+    ig.addEventListener('mouseenter', () => { hover = true; update(); });
+    ig.addEventListener('mouseleave', () => { hover = false; update(); });
+    ig.addEventListener('focusin', e => { kbFocus = e.target.matches(':focus-visible'); update(); });
+    ig.addEventListener('focusout', () => { kbFocus = false; update(); });
+    lb.addEventListener('close', () => {
+      hover = ig.matches(':hover');
+      kbFocus = !!ig.querySelector(':focus-visible');
+      update();
+    });
     ig.querySelector('.ig-prev').addEventListener('click', () => { pending -= cardStep(); });
     ig.querySelector('.ig-next').addEventListener('click', () => { pending += cardStep(); });
 
