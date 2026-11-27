@@ -379,7 +379,10 @@
     if (!photos.length) return;
     const isYT = s => s.startsWith('yt:');
     const isVid = s => isYT(s) || /\.(mp4|webm|mov)$/i.test(s);
-    const show = (s, btn) => {
+    // Switching photos slides the new one in from the side you're moving toward, like the Leadership photo viewer.
+    let cur = -1;
+    const show = (s, btn, i) => {
+      const dir = cur < 0 ? 0 : Math.sign(i - cur); cur = i;
       main.classList.toggle('is-video', isVid(s));
       main.innerHTML = isYT(s)
         ? `<iframe src="https://www.youtube-nocookie.com/embed/${s.slice(3)}?rel=0&playsinline=1" title="Project video on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
@@ -387,6 +390,8 @@
         ? `<video src="${s}" autoplay muted loop playsinline controls></video>`
         : `<img src="${s}" alt="">`;
       thumbs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+      const el = main.firstElementChild;
+      if (dir && el && !matchMedia('(prefers-reduced-motion: reduce)').matches) el.animate([{ opacity: 0, transform: `translateX(${dir * 60}px) scale(.97)` }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16, 1, .3, 1)' });
     };
     photos.forEach((s, i) => {
       const b = document.createElement('button'); b.type = 'button';
@@ -397,8 +402,8 @@
         ? `<video src="${s}#t=0.5" muted playsinline preload="metadata"></video><span class="play" aria-hidden="true">▶</span>`
         : `<img src="${s}" alt="">`;
       if (isVid(s)) b.classList.add('vid');
-      b.onclick = () => show(s, b); thumbs.appendChild(b);
-      if (i === 0) show(s, b);
+      b.onclick = () => show(s, b, i); thumbs.appendChild(b);
+      if (i === 0) show(s, b, 0);
     });
     if (photos.length === 1) thumbs.hidden = true;
   }

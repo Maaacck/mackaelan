@@ -401,7 +401,11 @@ document.addEventListener('click', e => { const d = document.querySelector('.ema
     list.forEach((s, i) => {
       const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', `Photo ${i + 1}`);
       b.innerHTML = `<img src="${s}" alt="">`;
-      b.onclick = () => { main.innerHTML = `<img src="${s}" alt="">`; thumbs.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
+      b.onclick = () => {
+        const dir = g.dataset.cur == null ? 0 : Math.sign(i - g.dataset.cur); g.dataset.cur = i;
+        main.innerHTML = `<img src="${s}" alt="">`;
+        if (dir && !matchMedia('(prefers-reduced-motion: reduce)').matches) main.firstElementChild.animate([{ opacity: 0, transform: `translateX(${dir * 60}px) scale(.97)` }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16, 1, .3, 1)' });
+        thumbs.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
       thumbs.appendChild(b); if (i === 0) b.click();
     });
     if (list.length < 2) thumbs.hidden = true;
