@@ -571,3 +571,10 @@ html.clouds-ready main::before { display: none; }
 html.custom-cursor:has(dialog[open]), html.custom-cursor:has(dialog[open]) * { cursor: none !important; }
 html.custom-cursor:has(dialog[open]) iframe { cursor: auto !important; }
 html.cursor-on:has(dialog[open]) .cursor-dot, html.cursor-on:has(dialog[open]) .cursor-ring { opacity: 1 !important; }
+
+
+/* ---------- Full-width background (Background.webp, 1920 x 1080) ---------- */
+/* One halftone image of the sky and Campanile fills the whole window. It is pinned while the page
+   scrolls, and cropped from the right side on narrow screens so the tower stays in view. */
+html::before { background: url("Background.webp") 85% center / cover no-repeat, #2b00df; filter: none; transform: none; }
+body::before { display: none; }
