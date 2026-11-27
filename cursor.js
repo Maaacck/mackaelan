@@ -47,6 +47,19 @@
   const dot = make('cursor-dot');
   const ring = make('cursor-ring');
 
+  // Pop-ups (<dialog>) open in the browser's top layer, above everything else on the page. To keep the
+  // cursor visible over them, the dot and ring are popovers too, and get re-raised above each pop-up as it opens.
+  const raiseCursor = () => {
+    if (!dot.showPopover) return;
+    for (const el of [ring, dot]) { try { if (el.matches(':popover-open')) el.hidePopover(); el.showPopover(); } catch (err) {} }
+  };
+  if (dot.showPopover) { dot.popover = 'manual'; ring.popover = 'manual'; raiseCursor(); }
+  new MutationObserver(ms => { if (ms.some(m => m.target.open)) raiseCursor(); })
+    .observe(document.body, { subtree: true, attributes: true, attributeFilter: ['open'] });
+  // Embedded frames (like the resume PDF) draw their own cursor, so hide this one while over them.
+  addEventListener('pointerover', e => { if (e.target.tagName === 'IFRAME') root.classList.remove('cursor-on'); }, { passive: true });
+  addEventListener('pointermove', e => { if (seen && (!e.pointerType || e.pointerType === 'mouse')) root.classList.add('cursor-on'); }, { passive: true });
+
   let x = -100, y = -100, rx = -100, ry = -100, lastX = 0, lastY = 0, seen = false;
   const COLORS = ['#f6f4ff', '#ffffff', '#cfc8ff', '#9a8cff'];
   let pixels = 0;

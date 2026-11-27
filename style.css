@@ -563,3 +563,11 @@ html.clouds-ready main::before { display: none; }
 .cursor-ring.hover::before { transform: scale(1.45) rotate(20deg); border: 0; background: radial-gradient(rgba(246, 244, 255, .85) 1.3px, transparent 1.8px) 0 0 / 5px 5px; -webkit-mask: radial-gradient(circle, #000 70%, transparent 73%); mask: radial-gradient(circle, #000 70%, transparent 73%); }
 .cursor-ring.down::before { transform: scale(.8); border: 0; }
 .cursor-pixel { border-radius: 50%; box-shadow: 0 0 0 1px rgba(43, 0, 223, .45); }
+
+
+/* ---------- Cursor over pop-ups ---------- */
+/* The cursor stays the cloud cursor over pop-ups (cursor.js lifts it above them as a popover). */
+.cursor-dot[popover], .cursor-ring[popover] { margin: 0; padding: 0; border: 0; inset: auto; left: 0; top: 0; width: 0; height: 0; overflow: visible; background: none; color: inherit; }
+html.custom-cursor:has(dialog[open]), html.custom-cursor:has(dialog[open]) * { cursor: none !important; }
+html.custom-cursor:has(dialog[open]) iframe { cursor: auto !important; }
+html.cursor-on:has(dialog[open]) .cursor-dot, html.cursor-on:has(dialog[open]) .cursor-ring { opacity: 1 !important; }
