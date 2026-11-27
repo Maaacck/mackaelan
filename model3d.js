@@ -41,7 +41,7 @@ function mount(el) {
   geo.computeVertexNormals();
   geo = geo.toNonIndexed();
   const colors = new Float32Array(n * 9);
-  const pal = PALETTE.map(h => new THREE.Color(h));
+  const pal = (el.dataset.colors ? el.dataset.colors.split(',') : PALETTE).map(h => new THREE.Color(h.trim()));
   for (let t = 0; t < n; t++) { const c = pal[col[t]] || pal[0]; for (let v = 0; v < 3; v++) colors.set([c.r, c.g, c.b], t * 9 + v * 3); }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   geo.rotateX(-Math.PI / 2);
