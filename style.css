@@ -629,4 +629,4 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 
 /* ---------- Square corners on the Projects page ---------- */
 /* Project photos, the 3D bear viewer and its hint label get the same square corners as the rest of the site. */
-html body .proj-shot, html body .proj-shot img, html body .model3d, html body .model3d canvas, html body .model3d-hint { border-radius: 0; }
+.project > .proj-shot, html body .proj-shot, html body .proj-shot img, html body .model3d, html body .model3d canvas, html body .model3d-hint { border-radius: 0; }
