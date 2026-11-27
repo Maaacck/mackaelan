@@ -599,11 +599,12 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 .sidebar ul a[aria-current="page"] { text-shadow: none; }
 @media (max-width: 860px) { body::after { background: linear-gradient(180deg, rgba(36, 0, 190, .7), rgba(36, 0, 190, .5)); } }
 
-/* ---------- Background clouds in the transition style ---------- */
-/* Same shape and color as the page-transition clouds: a solid long pill with two round puffs on top.
-   They sit under the darkening scrim, so they show brightly on the open sky and stay soft behind
-   the text, which keeps it readable. */
-.sky-clouds .c, .sky-clouds .c.soft { background: #f6f4ff; border-radius: 999px; -webkit-mask: none; mask: none; filter: none; opacity: var(--o2, .92); }
-.sky-clouds .c::before, .sky-clouds .c::after { background: #f6f4ff; border-radius: 50%; top: auto; width: 22%; height: 150%; bottom: 30%; left: 30%; }
+/* ---------- Background clouds: transition shape, background texture ---------- */
+/* The puffy pill-and-two-puffs shape of the transition clouds, filled the way the background photo
+   is printed: a pale lavender wash covered in fine halftone dots. They sit under the darkening
+   scrim, so they show brightly on the open sky and stay soft behind the text. */
+.sky-clouds .c, .sky-clouds .c.soft { border-radius: 999px; -webkit-mask: none; mask: none; filter: none; opacity: var(--o2, .95);
+  background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px, linear-gradient(rgba(226, 230, 253, .62), rgba(160, 159, 243, .42)); }
+.sky-clouds .c::before, .sky-clouds .c::after { background: inherit; border-radius: 50%; top: auto; width: 22%; height: 150%; bottom: 30%; left: 30%; }
 .sky-clouds .c::after { width: 16%; height: 120%; left: 62%; }
-.sky-clouds .c.soft { --o2: .7; }
+.sky-clouds .c.soft { --o2: .7; background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px; }
