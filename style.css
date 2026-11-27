@@ -584,7 +584,8 @@ body::before { display: none; }
 /* Text that sits straight on the background (intro blurb, headings, captions, the sidebar) gets a soft
    deep-blue halo so it stays readable over the white parts of the halftone image, and the left-side
    shade reaches a little further. Text inside cards, buttons, tags and pop-ups keeps its own styling. */
-body::after { background: linear-gradient(90deg, rgba(36, 0, 190, .82) 0%, rgba(36, 0, 190, .62) 45%, rgba(36, 0, 190, .25) 70%, rgba(36, 0, 190, 0) 86%); }
+body::after { background: linear-gradient(90deg, rgba(36, 0, 190, .86) 0%, rgba(36, 0, 190, .78) 50%, rgba(36, 0, 190, .4) 68%, rgba(36, 0, 190, 0) 86%); }
+main p, main li { color: #fff; }
 main, .sidebar { text-shadow: 0 0 2px rgba(18, 0, 110, .95), 0 1px 3px rgba(18, 0, 110, .9), 0 0 14px rgba(18, 0, 110, .65); }
 main .card, main .card *, main .entry, main .entry *, main .stat, main .stat *, main .courses li, main .courses li *,
 main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, main button, main dialog, main dialog *,
