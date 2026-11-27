@@ -626,3 +626,7 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 .cursor-ring.hover::before { transform: scale(1.4); background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px, rgba(213, 220, 249, .35);
   -webkit-mask: radial-gradient(circle, #000 70%, transparent 73%); mask: radial-gradient(circle, #000 70%, transparent 73%); }
 .cursor-pixel { box-shadow: 0 0 0 1px rgba(43, 0, 223, .35); }
+
+/* ---------- Square corners on the Projects page ---------- */
+/* Project photos, the 3D bear viewer and its hint label get the same square corners as the rest of the site. */
+.proj-shot, .proj-shot img, .model3d, .model3d canvas, .model3d-hint { border-radius: 0; }
