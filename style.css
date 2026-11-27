@@ -545,3 +545,21 @@ main::after { display: none; }
 main::before { clip-path: none; background: #f6f4ff; animation: cover-off .3s ease 1.5s both; }
 html.clouds-ready main::before { display: none; }
 @keyframes cover-off { to { opacity: 0; visibility: hidden; } }
+
+
+/* ---------- Cloud cursor ---------- */
+/* A tiny white cloud for the pointer, a halftone-dot ring that trails behind it (it puffs up over
+   anything clickable), and a trail of small round puffs that float upward and fade. A thin blue
+   edge keeps all of it visible over the white parts of the page. */
+.cursor-dot::before { width: 14px; height: 7px; left: -7px; top: -2px; background: #f6f4ff; border-radius: 999px; box-shadow: none; filter: drop-shadow(0 0 .6px #2b00df) drop-shadow(0 1.5px 0 rgba(43, 0, 223, .55)); }
+.cursor-dot::after { content: ""; position: absolute; width: 8px; height: 8px; left: -4px; top: -6px; background: #f6f4ff; border-radius: 50%; filter: drop-shadow(0 0 .6px #2b00df); }
+.cursor-ring::before {
+  width: 36px; height: 36px; left: -18px; top: -18px; border: 0; border-radius: 50%;
+  background: radial-gradient(#f6f4ff 1.3px, transparent 1.8px) 0 0 / 5px 5px;
+  -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%, #000 72%, transparent 74%);
+  mask: radial-gradient(circle, transparent 54%, #000 56%, #000 72%, transparent 74%);
+  filter: drop-shadow(0 0 .8px #2b00df);
+}
+.cursor-ring.hover::before { transform: scale(1.45) rotate(20deg); border: 0; background: radial-gradient(rgba(246, 244, 255, .85) 1.3px, transparent 1.8px) 0 0 / 5px 5px; -webkit-mask: radial-gradient(circle, #000 70%, transparent 73%); mask: radial-gradient(circle, #000 70%, transparent 73%); }
+.cursor-ring.down::before { transform: scale(.8); border: 0; }
+.cursor-pixel { border-radius: 50%; box-shadow: 0 0 0 1px rgba(43, 0, 223, .45); }

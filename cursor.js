@@ -35,8 +35,8 @@
   addEventListener('pageshow', e => { if (e.persisted) root.classList.remove('wipe-out'); });
 })();
 
-// Themed custom cursor: a white pixel dot, a lavender square that trails behind and
-// turns into a diamond over anything clickable, and a short trail of dithered pixels.
+// Cloud cursor: a tiny white cloud, a halftone-dot ring that trails behind and puffs up
+// over anything clickable, and a trail of small puffs that float upward and fade.
 (() => {
   if (!matchMedia('(pointer: fine)').matches) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -59,7 +59,8 @@
     p.style.top = py + 'px';
     p.style.background = COLORS[(Math.random() * COLORS.length) | 0];
     p.style.setProperty('--dx', ((Math.random() - .5) * 26).toFixed(1) + 'px');
-    p.style.setProperty('--dy', (8 + Math.random() * 18).toFixed(1) + 'px');
+    p.style.setProperty('--dy', (-8 - Math.random() * 16).toFixed(1) + 'px');
+    const sz = (3 + Math.random() * 5).toFixed(1) + 'px'; p.style.width = sz; p.style.height = sz;
     pixels++;
     p.addEventListener('animationend', () => { p.remove(); pixels--; });
     document.body.appendChild(p);
