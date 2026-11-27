@@ -608,3 +608,21 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 .sky-clouds .c::before, .sky-clouds .c::after { background: inherit; border-radius: 50%; top: auto; width: 22%; height: 150%; bottom: 30%; left: 30%; }
 .sky-clouds .c::after { width: 16%; height: 120%; left: 62%; }
 .sky-clouds .c.soft { --o2: .7; background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px; }
+
+/* ---------- Cursor matched to the background clouds ---------- */
+/* The pointer is a tiny version of the drifting clouds (a pill with two round puffs, pale lavender
+   shading to white), the trailing ring is printed in the same fine halftone dots over a lavender
+   wash, and the trail puffs use the background photo's palette. */
+.cursor-dot::before { width: 18px; height: 7px; left: -9px; top: -1px; border-radius: 999px; background: linear-gradient(#f6f4ff 40%, #d5dcf9); }
+.cursor-dot::after { width: 14px; height: 9px; left: -7px; top: -7px; border-radius: 0;
+  background: radial-gradient(circle at 32% 72%, #f6f4ff 3.6px, transparent 4px), radial-gradient(circle at 72% 82%, #f6f4ff 2.7px, transparent 3.1px);
+  filter: drop-shadow(0 0 .6px #2b00df); }
+.cursor-ring::before {
+  background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px, radial-gradient(circle, rgba(213, 220, 249, .45) 60%, rgba(160, 159, 243, .2));
+  -webkit-mask: radial-gradient(circle, transparent 50%, #000 53%, #000 72%, transparent 74%);
+          mask: radial-gradient(circle, transparent 50%, #000 53%, #000 72%, transparent 74%);
+  filter: drop-shadow(0 0 .6px #2b00df);
+}
+.cursor-ring.hover::before { transform: scale(1.4); background: radial-gradient(circle, #f6f4ff 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px, rgba(213, 220, 249, .35);
+  -webkit-mask: radial-gradient(circle, #000 70%, transparent 73%); mask: radial-gradient(circle, #000 70%, transparent 73%); }
+.cursor-pixel { box-shadow: 0 0 0 1px rgba(43, 0, 223, .35); }
