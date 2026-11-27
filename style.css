@@ -654,10 +654,12 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 @media (prefers-reduced-motion: reduce) { .haruka, .haruka .hk-sway, .haruka img { animation: none; } .haruka { top: 12px; } .hk-fx { display: none; } }
 @media print { .haruka, .hk-fx { display: none; } }
 
-/* ---------- Overview: what I'm up to right now ---------- */
-/* The home page overview is a snapshot of current work instead of numbers: each card has a small
-   white label (Studying, Building, ...), a short title, and one line of detail. */
-.stats.now .stat { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.stats.now .now-k { font: 900 11px/1 Lato, sans-serif; font-style: normal; letter-spacing: .12em; text-transform: uppercase;
+/* ---------- Overview: what I care about ---------- */
+/* The home page overview shows three interests instead of numbers: each card has a small white
+   label (Engineering, Education, Art), a short title, and one line about where it shows up. */
+.stats.focus { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 640px) { .stats.focus { grid-template-columns: 1fr; } }
+.stats.focus .stat { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.stats.focus .now-k { font: 900 11px/1 Lato, sans-serif; font-style: normal; letter-spacing: .12em; text-transform: uppercase;
   background: #f6f4ff; color: #2b00df; padding: 5px 8px; text-shadow: none; }
-.stats.now .stat b { font: 19px/1.25 Righteous, "Trebuchet MS", sans-serif; color: #fff; margin-top: 4px; }
+.stats.focus .stat b { font: 19px/1.25 Righteous, "Trebuchet MS", sans-serif; color: #fff; margin-top: 4px; }
