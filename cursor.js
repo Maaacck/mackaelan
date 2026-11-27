@@ -1,9 +1,24 @@
-// Page transitions: when a link goes to another page of the site, the violet and pink bands
-// (main::before / main::after in style.css) wipe in to cover the content, then the next page loads
-// and wipes open.
+// Cloud theme: a layer of drifting clouds behind the page (some solid, some halftone dots), and
+// page transitions made of long horizontal clouds. Arriving pages start covered by the clouds,
+// which slide off to the right; leaving for another page of the site slides them back in from the left.
 (() => {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const layer = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.setAttribute('aria-hidden', 'true'); d.innerHTML = html; document.body.appendChild(d); return d; };
+
+  layer('sky-clouds',
+    '<i class="c dot" style="width:300px;height:80px;top:12%;left:38%"></i>' +
+    '<i class="c dot slow" style="width:200px;height:56px;top:38%;left:56%"></i>' +
+    '<i class="c dot" style="width:240px;height:64px;top:70%;left:24%"></i>' +
+    '<i class="c slow" style="width:160px;height:44px;top:8%;right:8%"></i>' +
+    '<i class="c" style="width:560px;height:130px;bottom:-50px;right:-60px"></i>' +
+    '<i class="c dot slow" style="width:520px;height:120px;bottom:-40px;left:18%"></i>');
+
+  if (reduce) return;
+  const delays = [.12, 0, .2, .06, .24, .1];
+  const wipe = layer('cloud-wipe arrive', delays.map((d, i) => '<i class="band" style="top:' + (i * 18 - 6) + '%;--d:' + d + 's"></i>').join(''));
+  root.classList.add('clouds-ready');
+
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href]');
     if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -13,13 +28,14 @@
     if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname)) return;
     if (url.pathname === location.pathname) return;
     e.preventDefault();
+    wipe.classList.remove('arrive');
     root.classList.add('wipe-out');
-    setTimeout(() => { location.href = url.href; }, 470);
+    setTimeout(() => { location.href = url.href; }, 760);
   });
   addEventListener('pageshow', e => { if (e.persisted) root.classList.remove('wipe-out'); });
 })();
 
-// Themed custom cursor: a pink pixel dot, a violet square that trails behind and
+// Themed custom cursor: a white pixel dot, a lavender square that trails behind and
 // turns into a diamond over anything clickable, and a short trail of dithered pixels.
 (() => {
   if (!matchMedia('(pointer: fine)').matches) return;
@@ -32,7 +48,7 @@
   const ring = make('cursor-ring');
 
   let x = -100, y = -100, rx = -100, ry = -100, lastX = 0, lastY = 0, seen = false;
-  const COLORS = ['#ee8cff', '#8f5bff', '#2f8cff', '#bb00dd'];
+  const COLORS = ['#f6f4ff', '#ffffff', '#cfc8ff', '#9a8cff'];
   let pixels = 0;
 
   const spawn = (px, py) => {

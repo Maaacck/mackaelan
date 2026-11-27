@@ -513,3 +513,35 @@ a.card:hover { border-color: #fff; box-shadow: 8px 8px 0 #fff; }
 .hero-photo { border: 4px solid #f6f4ff; box-shadow: 8px 8px 0 rgba(246, 244, 255, .5); }
 h2 { display: inline-block; background: #f6f4ff; color: #2b00df; padding: 2px 12px; }
 @media (max-width: 900px) { body::after { background: linear-gradient(180deg, rgba(36, 0, 190, .62), rgba(36, 0, 190, .42)); } }
+
+
+/* ---------- Cloud theme (layers added by cursor.js) ---------- */
+/* Drifting clouds behind the page: solid ones and halftone-dot ones, each with a hard blue shadow
+   so they read on both the blue and the white parts of the background. */
+.sky-clouds { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.sky-clouds .c { position: absolute; display: block; background: #f6f4ff; border-radius: 999px; filter: drop-shadow(0 6px 0 rgba(43, 0, 223, .35)); animation: cloud-drift 40s ease-in-out infinite alternate; }
+.sky-clouds .c::before, .sky-clouds .c::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+.sky-clouds .c::before { width: 52%; height: 190%; left: 14%; bottom: 30%; }
+.sky-clouds .c::after { width: 38%; height: 150%; right: 12%; bottom: 35%; }
+.sky-clouds .c.dot { background: radial-gradient(#f6f4ff 1.7px, transparent 2.2px) 0 0 / 6px 6px; filter: none; }
+.sky-clouds .c.slow { animation-duration: 55s; animation-direction: alternate-reverse; }
+@keyframes cloud-drift { to { transform: translateX(90px); } }
+
+/* Page transition: long horizontal clouds slide across the content area (the sidebar stays put). */
+.cloud-wipe { position: fixed; top: 0; bottom: 0; left: var(--sidebar); right: 0; z-index: 9; pointer-events: none; overflow: hidden; }
+.cloud-wipe .band { position: absolute; display: block; left: -25%; width: 150%; height: 24%; background: #f6f4ff; border-radius: 999px; transform: translateX(110%); }
+.cloud-wipe .band::before, .cloud-wipe .band::after { content: ""; position: absolute; background: #f6f4ff; border-radius: 50%; width: 22%; height: 150%; bottom: 30%; left: 30%; }
+.cloud-wipe .band::after { width: 16%; height: 120%; left: 62%; }
+.cloud-wipe.arrive .band { animation: band-off .6s cubic-bezier(.6, 0, .3, 1) var(--d) both; }
+html.wipe-out .cloud-wipe .band { animation: band-on .5s cubic-bezier(.6, 0, .3, 1) var(--d) both; }
+@keyframes band-on { from { transform: translateX(-110%); } to { transform: translateX(0); } }
+@keyframes band-off { from { transform: translateX(0); } to { transform: translateX(110%); } }
+@media (max-width: 860px) { .cloud-wipe { left: 0; } }
+@media (prefers-reduced-motion: reduce) { .sky-clouds .c { animation: none; } }
+
+/* The old color-band wipe is replaced by the clouds. Until cursor.js adds them, a plain cover keeps
+   the arriving page hidden (it lifts by itself if the script never runs). */
+main::after { display: none; }
+main::before { clip-path: none; background: #f6f4ff; animation: cover-off .3s ease 1.5s both; }
+html.clouds-ready main::before { display: none; }
+@keyframes cover-off { to { opacity: 0; visibility: hidden; } }
