@@ -3,6 +3,7 @@
 // header, varint deltas for quantized vertex positions and triangle indices, then one color index per triangle.
 import * as THREE from 'https://esm.sh/three@0.160.0';
 import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { RoomEnvironment } from 'https://esm.sh/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
 
 const PALETTE = ['#C8805E', '#A0A0A0', '#4D2D20', '#391F19', '#F6C892'];
 
@@ -56,10 +57,16 @@ function mount(el) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, r / 50, r * 50);
   camera.position.set(r * 1.2, r * 0.6, r * 3.2);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x3a2a5a, 1.6));
-  const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(r * 2, r * 3, r * 4); scene.add(key);
-  const rim = new THREE.DirectionalLight(0xee8cff, 0.8); rim.position.set(-r * 3, r, -r * 3); scene.add(rim);
-  scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.45, metalness: 0.05 })));
+  // Lighting: a soft studio environment for even, neutral fill, plus a key and a fill light that ride
+  // along with the camera so the side facing you is always well lit as the model spins.
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d2ff, 0.35));
+  scene.add(camera);
+  const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(r * 1.5, r * 2, r * 0.5); camera.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-r * 2, -r * 0.5, r * 0.5); camera.add(fill);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(-r * 3, r * 2, -r * 3); scene.add(rim);
+  scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, metalness: 0, envMapIntensity: 0.6 })));
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 1.6;
