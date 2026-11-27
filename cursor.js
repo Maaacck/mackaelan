@@ -1,4 +1,4 @@
-// Cloud theme: a layer of drifting clouds behind the page (some solid, some halftone dots), and
+// Cloud theme: a layer of wispy halftone clouds that loop across the sky behind the page, and
 // page transitions made of long horizontal clouds. Arriving pages start covered by the clouds,
 // which slide off to the right; leaving for another page of the site slides them back in from the left.
 (() => {
@@ -7,12 +7,13 @@
   const layer = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.setAttribute('aria-hidden', 'true'); d.innerHTML = html; document.body.appendChild(d); return d; };
 
   layer('sky-clouds',
-    '<i class="c dot" style="width:300px;height:80px;top:12%;left:38%"></i>' +
-    '<i class="c dot slow" style="width:200px;height:56px;top:38%;left:56%"></i>' +
-    '<i class="c dot" style="width:240px;height:64px;top:70%;left:24%"></i>' +
-    '<i class="c slow" style="width:160px;height:44px;top:8%;right:8%"></i>' +
-    '<i class="c" style="width:560px;height:130px;bottom:-50px;right:-60px"></i>' +
-    '<i class="c dot slow" style="width:520px;height:120px;bottom:-40px;left:18%"></i>');
+    '<i class="c" style="width:900px;height:70px;top:10%;--dur:110s;--del:-44s;--bob:9s;--o:0.85"></i>' +
+    '<i class="c soft" style="width:700px;height:90px;top:18%;--dur:150s;--del:-112.5s;--bob:11s"></i>' +
+    '<i class="c" style="width:620px;height:50px;top:34%;--dur:125s;--del:-12.5s;--bob:8s;--o:0.7"></i>' +
+    '<i class="c" style="width:1100px;height:90px;top:52%;--dur:140s;--del:-77s;--bob:12s;--o:0.8"></i>' +
+    '<i class="c soft" style="width:900px;height:110px;top:60%;--dur:170s;--del:-34s;--bob:10s"></i>' +
+    '<i class="c" style="width:560px;height:44px;top:44%;--dur:100s;--del:-90s;--bob:7s;--o:0.6"></i>' +
+    '<i class="c" style="width:1000px;height:80px;top:72%;--dur:130s;--del:-39s;--bob:10s;--o:0.75"></i>');
 
   if (reduce) return;
   const delays = [.12, 0, .2, .06, .24, .1];

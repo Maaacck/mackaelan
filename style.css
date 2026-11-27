@@ -516,16 +516,23 @@ h2 { display: inline-block; background: #f6f4ff; color: #2b00df; padding: 2px 12
 
 
 /* ---------- Cloud theme (layers added by cursor.js) ---------- */
-/* Drifting clouds behind the page: solid ones and halftone-dot ones, each with a hard blue shadow
-   so they read on both the blue and the white parts of the background. */
+/* Drifting clouds behind the page, drawn like the wispy streaks in the background photo: long, soft,
+   pale-lavender bands printed in the same fine halftone dots. Each one loops across the whole window
+   from left to right at its own steady speed, with a slow up-and-down bob. Negative delays spread
+   them out so the sky is never empty. */
 .sky-clouds { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.sky-clouds .c { position: absolute; display: block; background: #f6f4ff; border-radius: 999px; filter: drop-shadow(0 6px 0 rgba(43, 0, 223, .35)); animation: cloud-drift 40s ease-in-out infinite alternate; }
-.sky-clouds .c::before, .sky-clouds .c::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
-.sky-clouds .c::before { width: 52%; height: 190%; left: 14%; bottom: 30%; }
-.sky-clouds .c::after { width: 38%; height: 150%; right: 12%; bottom: 35%; }
-.sky-clouds .c.dot { background: radial-gradient(#f6f4ff 1.7px, transparent 2.2px) 0 0 / 6px 6px; filter: none; }
-.sky-clouds .c.slow { animation-duration: 55s; animation-direction: alternate-reverse; }
-@keyframes cloud-drift { to { transform: translateX(90px); } }
+.sky-clouds .c { position: absolute; display: block; left: 0;
+  background: radial-gradient(closest-side, rgba(213, 220, 249, .8), rgba(213, 220, 249, .4) 55%, rgba(213, 220, 249, 0));
+  -webkit-mask: radial-gradient(circle, #000 1px, transparent 1.6px) 0 0 / 3px 3px;
+          mask: radial-gradient(circle, #000 1px, transparent 1.6px) 0 0 / 3px 3px;
+  opacity: var(--o, .8); will-change: transform; backface-visibility: hidden;
+  animation: cloud-loop var(--dur, 90s) linear var(--del, 0s) infinite, cloud-bob var(--bob, 9s) ease-in-out var(--del, 0s) infinite alternate; }
+.sky-clouds .c::before, .sky-clouds .c::after { content: ""; position: absolute; background: inherit; }
+.sky-clouds .c::before { width: 70%; height: 55%; left: 22%; top: -38%; }
+.sky-clouds .c::after { width: 55%; height: 45%; left: -6%; top: 82%; }
+.sky-clouds .c.soft { -webkit-mask: none; mask: none; filter: blur(6px); --o: .3; }
+@keyframes cloud-loop { from { transform: translate3d(-110%, 0, 0); } to { transform: translate3d(calc(100vw + 10%), 0, 0); } }
+@keyframes cloud-bob { from { translate: 0 -5px; } to { translate: 0 5px; } }
 
 /* Page transition: long horizontal clouds slide across the content area (the sidebar stays put). */
 .cloud-wipe { position: fixed; top: 0; bottom: 0; left: var(--sidebar); right: 0; z-index: 9; pointer-events: none; overflow: hidden; }
