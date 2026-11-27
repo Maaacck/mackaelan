@@ -141,7 +141,7 @@
 
   <dialog class="project-dialog" id="dlg-hexapod" aria-labelledby="dlg-hexapod-title">
     <button class="dlg-close" type="button" aria-label="Close">✕</button>
-    <div class="dlg-gallery" data-list="images/hexapod-1.avif,yt:eR1gQSE8qtw,images/hexapod-2.avif,images/hexapod-3.avif">
+    <div class="dlg-gallery" data-list="images/hexapod-whiteboard.webp,images/hexapod-3.avif,images/hexapod-quad.webp,images/hexapod-1.avif,images/hexapod-2.avif,yt:eR1gQSE8qtw" data-captions="Placeholder: early planning on the whiteboard, from leg sketches to the parts list.|Placeholder: the grey printed shell plates that hold the motors.|Placeholder: an early four-legged version of the robot.|Placeholder: the finished hexapod standing on its own.|Placeholder: wiring up the servos and electronics.|Placeholder: the hexapod walking.">
       <div class="dlg-main"><svg viewBox="0 0 360 220" role="img" aria-label="Illustration of a six-legged robot">
             <rect width="360" height="220" fill="#1a0099"/>
             <g stroke="#ee8cff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -259,7 +259,7 @@
       <h3 id="dlg-cd-stand-title">CD Stand</h3>
       <p class="dlg-overview">Placeholder: a short overview of the project and why you made it.</p>
       <h4>Spin the 3D model</h4>
-      <div class="model3d" data-model="models/cd-stand.mesh" role="img" aria-label="Interactive 3D model of the CD stand. Drag to rotate, scroll to zoom."><span class="model3d-hint">Drag to rotate · scroll to zoom</span></div>
+      <div class="model3d" data-model="models/cd-stand.mesh" data-colors="#181818,#9c9c9c" role="img" aria-label="Interactive 3D model of the CD stand. Drag to rotate, scroll to zoom."><span class="model3d-hint">Drag to rotate · scroll to zoom</span></div>
           <h4>Design</h4>
           <ul class="points">
             <li class="ph">Placeholder: how you designed it.</li>
@@ -360,6 +360,9 @@
     if (g.dataset.loaded) return; g.dataset.loaded = '1';
     const main = g.querySelector('.dlg-main'), thumbs = g.querySelector('.dlg-thumbs');
     const fallback = main.innerHTML; let photos = [];
+    const caps = (g.dataset.captions || '').split('|');
+    let capEl = null;
+    if (g.dataset.captions) { capEl = document.createElement('p'); capEl.className = 'dlg-caption ph'; capEl.setAttribute('aria-live', 'polite'); main.after(capEl); }
     if (g.dataset.list) photos = g.dataset.list.split(',').map(s => s.trim()).filter(Boolean);
     else for (let i = 1; i <= 12; i++) { const s = await findPhoto(g.dataset.photos, i); if (!s) break; photos.push(s); }
     if (!photos.length) return;
@@ -369,6 +372,7 @@
     let cur = -1;
     const show = (s, btn, i) => {
       const dir = cur < 0 ? 0 : Math.sign(i - cur); cur = i;
+      if (capEl) capEl.textContent = caps[i] || '';
       main.classList.toggle('is-video', isVid(s));
       main.innerHTML = isYT(s)
         ? `<iframe src="https://www.youtube-nocookie.com/embed/${s.slice(3)}?rel=0&playsinline=1" title="Project video on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`

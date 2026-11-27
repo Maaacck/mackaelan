@@ -663,3 +663,8 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 .stats.focus .now-k { font: 900 11px/1 Lato, sans-serif; font-style: normal; letter-spacing: .12em; text-transform: uppercase;
   background: #f6f4ff; color: #2b00df; padding: 5px 8px; text-shadow: none; }
 .stats.focus .stat b { font: 19px/1.25 Righteous, "Trebuchet MS", sans-serif; color: #fff; margin-top: 4px; }
+
+
+/* Gallery captions under the main photo */
+.dlg-caption { margin: .6rem 0 0; font-size: .92rem; line-height: 1.4; opacity: .85; }
+.dlg-caption.ph { font-style: italic; }
