@@ -179,3 +179,42 @@
     e.clipboardData.setData('text/plain', out); e.preventDefault();
   });
 })();
+
+
+// Haruka: a small figure that slowly falls down the window on every page, starting each fall from a
+// random spot along the top edge and leaving a trail of puffs and sparkles that float up and fade.
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const d = document.createElement('div');
+  d.className = 'haruka'; d.setAttribute('aria-hidden', 'true');
+  d.innerHTML = '<div class="hk-sway"><img src="haruka.webp" alt="" width="150" height="190" draggable="false"></div>';
+  const place = () => {
+    d.style.setProperty('--x', (8 + Math.random() * 84).toFixed(1) + '%');
+    d.style.setProperty('--dur', (22 + Math.random() * 8).toFixed(1) + 's');
+  };
+  place();
+  d.addEventListener('animationiteration', e => { if (e.animationName === 'hk-fall') place(); });
+  document.body.appendChild(d);
+  if (reduce) return;
+
+  const COLORS = ['#f6f4ff', '#d5dcf9', '#a09ff3', '#8874f4'];
+  const KINDS = ['', 'dot', 'star', 'dot', '', 'star'];
+  let live = 0;
+  setInterval(() => {
+    if (document.hidden || live > 24) return;
+    const r = d.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    for (let i = 0; i < 2; i++) {
+      const p = document.createElement('i');
+      const kind = KINDS[Math.floor(Math.random() * KINDS.length)];
+      p.className = 'hk-fx' + (kind ? ' ' + kind : '');
+      const s = kind === 'dot' ? 9 + Math.random() * 7 : kind === 'star' ? 7 + Math.random() * 6 : 3 + Math.random() * 4;
+      p.style.cssText = `left:${r.left + r.width / 2 + (Math.random() - .5) * 30}px;top:${r.top + 6 + Math.random() * 14}px;` +
+        `--s:${s.toFixed(1)}px;--c:${COLORS[Math.floor(Math.random() * COLORS.length)]};--dx:${((Math.random() - .5) * 28).toFixed(1)}px;` +
+        `--t:${(1.2 + Math.random() * .9).toFixed(2)}s;--rot:${Math.random() < .5 ? -90 : 90}deg`;
+      live++;
+      p.addEventListener('animationend', () => { p.remove(); live--; });
+      document.body.appendChild(p);
+    }
+  }, 260);
+})();

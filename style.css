@@ -630,3 +630,26 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 /* ---------- Square corners on the Projects page ---------- */
 /* Project photos, the 3D bear viewer and its hint label get the same square corners as the rest of the site. */
 .project > .proj-shot, html body .proj-shot, html body .proj-shot img, html body .model3d, html body .model3d canvas, html body .model3d-hint { border-radius: 0; }
+
+/* ---------- Haruka (added by cursor.js) ---------- */
+/* A small Haruka drifts slowly down the window on every page. Each fall starts from a random spot
+   along the top edge; she sways side to side and tilts like a falling leaf, and leaves a trail of
+   little halftone puffs and sparkles in the background's colors that float up and fade. She never
+   blocks clicks. */
+.haruka { position: fixed; top: 0; left: var(--x, 50%); z-index: 8; width: 44px; margin-left: -22px; pointer-events: none;
+  animation: hk-fall var(--dur, 26s) linear var(--delay, .6s) infinite both; }
+.haruka .hk-sway { animation: hk-sway 3.6s ease-in-out infinite alternate; }
+.haruka img { display: block; width: 100%; height: auto; animation: hk-tilt 2.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 1px #2b00df) drop-shadow(2px 3px 0 rgba(43, 0, 223, .45)) drop-shadow(0 0 6px rgba(213, 220, 249, .55)); }
+@keyframes hk-fall { from { transform: translateY(-80px); } to { transform: translateY(calc(100vh + 20px)); } }
+@keyframes hk-sway { from { transform: translateX(-22px); } to { transform: translateX(22px); } }
+@keyframes hk-tilt { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+.hk-fx { position: fixed; z-index: 7; pointer-events: none; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1px rgba(43, 0, 223, .3); animation: hk-fx var(--t, 1.6s) ease-out forwards; }
+.hk-fx.dot { box-shadow: none; background: radial-gradient(circle, var(--c) 1.15px, transparent 1.65px) 0 0 / 3.5px 3.5px; }
+.hk-fx.star { border-radius: 0; box-shadow: none; filter: drop-shadow(0 0 .6px #2b00df);
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); }
+@keyframes hk-fx { from { opacity: .95; transform: translate(0, 0) scale(1) rotate(0); }
+  to { opacity: 0; transform: translate(var(--dx), -22px) scale(.3) rotate(var(--rot, 90deg)); } }
+@media (prefers-reduced-motion: reduce) { .haruka, .haruka .hk-sway, .haruka img { animation: none; } .haruka { top: 12px; } .hk-fx { display: none; } }
+@media print { .haruka, .hk-fx { display: none; } }
