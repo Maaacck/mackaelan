@@ -702,3 +702,21 @@ html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; o
 .cs-fig:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .cs-fig:last-child:nth-child(odd) .cs-fig-box { aspect-ratio: 16 / 6; }
 @media (max-width: 560px) { .cs-pair, .cs-figs { grid-template-columns: 1fr; } .cs-fig:last-child:nth-child(odd) .cs-fig-box { aspect-ratio: 4 / 3; } }
+
+/* Project windows: use the space under the photos. In the main projects the quick facts, timeline, specs and
+   tools sit in a side column under the gallery; in the others the gallery stays in view while you scroll. */
+.dlg-side { padding: 0 20px 24px; align-self: start; }
+.dlg-side .cs-facts { margin-top: 4px; }
+.dlg-side h4 { font-family: var(--display); font-weight: 400; font-size: 1.05rem; color: #e2ddff; margin: 20px 0 6px; }
+.project-dialog.anim-in .dlg-side { animation: dlg-rise .5s .12s cubic-bezier(.16, 1, .3, 1) both; }
+@media (min-width: 761px) {
+  .project-dialog[open]:has(.dlg-side) { grid-template-rows: auto 1fr; }
+  .project-dialog .dlg-side { grid-column: 1; grid-row: 2; }
+  .project-dialog:has(.dlg-side) .dlg-body { grid-column: 2; grid-row: 1 / span 2; }
+  .project-dialog:not(:has(.dlg-side)) .dlg-gallery { position: sticky; top: 0; align-self: start; }
+}
+@media (max-width: 760px) {
+  .project-dialog .dlg-body { order: 2; }
+  .project-dialog .dlg-side { order: 3; padding: 0 22px 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .project-dialog.anim-in .dlg-side { animation-duration: .01ms; animation-delay: 0s; } }
