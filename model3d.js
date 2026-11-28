@@ -84,14 +84,19 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
       m.matrixWorldNeedsUpdate = true;
     }
   };
+  // As the parts spread out the whole set shrinks a little (rig.zoom at fully apart) so it stays in view.
+  const mid = new THREE.Vector3(); geo.boundingBox.getCenter(mid);
+  const Z = new THREE.Matrix4(), C = new THREE.Matrix4().makeTranslation(mid.x, mid.y, mid.z), Ci = new THREE.Matrix4().makeTranslation(-mid.x, -mid.y, -mid.z);
   const explode = s => {
     const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
     const [sx, sy, sz] = rig.shift || [0, 0, 0];
+    const zoom = 1 - (1 - (rig.zoom || 1)) * ease(s);
+    Z.makeScale(zoom, zoom, zoom).premultiply(C).multiply(Ci);
     for (const [g, m] of parts) {
       const [dx = 0, dy = 0, dz = 0, t0 = 0, t1 = 1] = rig.explode[g] || [];
       const k = ease((s - t0) / ((t1 - t0) || 1));
       // shift keeps the whole set centred in the view as it spreads out
-      m.matrix.makeTranslation(dx * k + sx * s, dy * k + sy * s, dz * k + sz * s);
+      m.matrix.makeTranslation(dx * k + sx * s, dy * k + sy * s, dz * k + sz * s).premultiply(Z);
       m.matrixWorldNeedsUpdate = true;
     }
   };
