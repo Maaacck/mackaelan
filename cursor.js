@@ -92,13 +92,15 @@
   document.addEventListener('mouseleave', () => root.classList.remove('cursor-on'));
   document.addEventListener('mouseenter', () => { if (seen) root.classList.add('cursor-on'); });
 
+  // The ring eases toward the pointer, and the loop sleeps once it has caught up.
+  let ticking = false;
   const tick = () => {
     rx += (x - rx) * (reduce ? 1 : 0.2);
     ry += (y - ry) * (reduce ? 1 : 0.2);
     ring.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(tick);
+    if (Math.abs(x - rx) + Math.abs(y - ry) > 0.1) requestAnimationFrame(tick); else ticking = false;
   };
-  requestAnimationFrame(tick);
+  addEventListener('pointermove', () => { if (!ticking) { ticking = true; requestAnimationFrame(tick); } }, { passive: true });
 })();
 
 // Box select: dragging on the page draws a rectangle and highlights only the words inside it

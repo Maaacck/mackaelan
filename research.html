@@ -73,8 +73,8 @@
         </ul>
         <div class="pie-photos three">
           <button type="button" class="pie-photo" aria-label="Enlarge photo of presenting the exoplanet poster"><img src="images/ulab-poster.avif" alt="Presenting our poster, Shedding Light on Obscura: Confirming the Existence of an Exoplanet, to a visitor" width="600" height="800" loading="lazy" draggable="false" style="object-position:50% 45%"></button>
-          <button type="button" class="pie-photo" aria-label="Enlarge photo of the ULAB team at the poster session"><img src="images/ulab-group.avif" alt="The ULAB research team taking a selfie in front of their exoplanet poster at the poster session" width="960" height="720" loading="lazy" draggable="false"></button>
-          <a class="pie-photo" href="files/ulab-poster.pdf" data-open-poster aria-label="Open our poster"><img src="images/ulab-poster-thumb.avif" alt="Our poster, Shedding Light on Obscura: Confirming the Existence of an Exoplanet" width="640" height="494" loading="lazy" draggable="false" style="object-fit:contain;background:#fff"></a>
+          <button type="button" class="pie-photo" aria-label="Enlarge photo of the ULAB team at the poster session"><img src="images/t/ulab-group.webp" data-full="images/ulab-group.avif" alt="The ULAB research team taking a selfie in front of their exoplanet poster at the poster session" width="960" height="720" loading="lazy" draggable="false"></button>
+          <a class="pie-photo" href="files/ulab-poster.pdf" data-open-poster aria-label="Open our poster"><img src="images/t/ulab-poster-thumb.webp" alt="Our poster, Shedding Light on Obscura: Confirming the Existence of an Exoplanet" width="640" height="494" loading="lazy" draggable="false" style="object-fit:contain;background:#fff"></a>
         </div>
         <ul class="tags"><li>Physics</li><li>Computer science</li><li>Research</li></ul>
       </article>
@@ -112,7 +112,7 @@
   lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1, -1); if (e.key === 'ArrowRight') show(idx + 1, 1); });
   document.querySelectorAll('.pie-photos').forEach(group => {
     const photos = [...group.querySelectorAll('button.pie-photo')];
-    const srcs = photos.map(b => b.querySelector('img').src);
+    const srcs = photos.map(b => { const im = b.querySelector('img'); return im.dataset.full || im.src; });
     photos.forEach((b, i) => b.addEventListener('click', () => open(srcs, i, b)));
   });
 })();
