@@ -24,7 +24,9 @@ export function decode(buf) {
   const idx = new Uint32Array(n * 3);
   { let v = 0; for (let i = 0; i < n * 3; i++) { v += next(); idx[i] = v; } }
   const col = bytes.subarray(o, o + n);
-  return { pos, idx, col, n };
+  // Optional: one part number per triangle, for models with moving parts.
+  const grp = bytes.length >= o + 2 * n ? bytes.subarray(o + n, o + 2 * n) : null;
+  return { pos, idx, col, n, grp };
 }
 
 async function load(url) {
@@ -33,8 +35,57 @@ async function load(url) {
   return decode(await new Response(stream).arrayBuffer());
 }
 
+// Moving parts. Each triangle belongs to a part: 0 fixed, 1 the sliding carriage, 2-4 the three finger
+// arms, 5-7 the three side links. data-rig holds where the joints are (in model units, around the
+// center axis O) and a table of [arm angle in degrees, carriage drop, link angle in degrees] from open to
+// closed, worked out from the linkage in the CAD model. A slider under the viewer drives it.
+function setupRig(el, geo, grp, n, rig, root, mat) {
+  const parts = [];
+  for (let g = 0; g < 8; g++) {
+    const tris = [];
+    for (let t = 0; t < n; t++) if (grp[t] === g) tris.push(t);
+    if (!tris.length) continue;
+    const sub = new THREE.BufferGeometry();
+    for (const name of ['position', 'normal', 'color']) {
+      const src = geo.getAttribute(name).array, a = new Float32Array(tris.length * 9);
+      tris.forEach((t, i) => a.set(src.subarray(t * 9, t * 9 + 9), i * 9));
+      sub.setAttribute(name, new THREE.BufferAttribute(a, 3));
+    }
+    const m = new THREE.Mesh(sub, mat);
+    m.matrixAutoUpdate = false; m.frustumCulled = false;
+    root.add(m); parts.push([g, m]);
+  }
+  const rad = Math.PI / 180, tab = rig.table;
+  const T = new THREE.Matrix4(), R = new THREE.Matrix4(), B = new THREE.Matrix4(), axis = new THREE.Vector3();
+  const pose = s => {
+    const x = s * (tab.length - 1), i = Math.min(tab.length - 2, Math.floor(x)), w = x - i;
+    const [th, d, ph] = [0, 1, 2].map(j => tab[i][j] * (1 - w) + tab[i + 1][j] * w);
+    for (const [g, m] of parts) {
+      if (g === 0) m.matrix.identity();
+      else if (g === 1) m.matrix.makeTranslation(0, 0, d);
+      else {
+        // Arms swing about their pin on the carriage (and ride down with it); links swing about their pin on the base.
+        const arm = g < 5, a = rig.angles[(g - 2) % 3] * rad, ux = Math.cos(a), uy = Math.sin(a);
+        const [pr, pz] = arm ? rig.p22 : rig.p26;
+        const px = rig.O[0] + ux * pr, py = rig.O[1] + uy * pr;
+        R.makeRotationAxis(axis.set(uy, -ux, 0), (arm ? th : ph) * rad);
+        T.makeTranslation(px, py, pz + (arm ? d : 0)); B.makeTranslation(-px, -py, -pz);
+        m.matrix.multiplyMatrices(T, R).multiply(B);
+      }
+      m.matrixWorldNeedsUpdate = true;
+    }
+  };
+  pose(0);
+  const label = document.createElement('label');
+  label.className = 'model3d-slider';
+  label.innerHTML = '<span>Open</span><input type="range" min="0" max="1" step="0.005" value="0" aria-label="Open or close the claw"><span>Closed</span>';
+  const input = label.querySelector('input');
+  input.addEventListener('input', () => pose(+input.value));
+  el.after(label);
+}
+
 function mount(el) {
-  const { pos, idx, col, n } = el._mesh;
+  const { pos, idx, col, n, grp } = el._mesh;
   let geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setIndex(new THREE.BufferAttribute(idx, 1));
@@ -44,12 +95,14 @@ function mount(el) {
   const pal = (el.dataset.colors ? el.dataset.colors.split(',') : PALETTE).map(h => new THREE.Color(h.trim()));
   for (let t = 0; t < n; t++) { const c = pal[col[t]] || pal[0]; for (let v = 0; v < 3; v++) colors.set([c.r, c.g, c.b], t * 9 + v * 3); }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  geo.rotateX(-Math.PI / 2);
+  // The model is stored Z-up: turn it Y-up and center it.
   geo.computeBoundingBox();
   const box = geo.boundingBox, size = new THREE.Vector3(), center = new THREE.Vector3();
   box.getSize(size); box.getCenter(center);
-  geo.translate(-center.x, -center.y, -center.z);
   const r = size.length() / 2;
+  const root = new THREE.Group();
+  root.rotation.x = -Math.PI / 2;
+  root.position.set(-center.x, -center.z, center.y);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -66,7 +119,10 @@ function mount(el) {
   const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(r * 1.5, r * 2, r * 0.5); camera.add(key);
   const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-r * 2, -r * 0.5, r * 0.5); camera.add(fill);
   const rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(-r * 3, r * 2, -r * 3); scene.add(rim);
-  scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, metalness: 0, envMapIntensity: 0.6 })));
+  const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, metalness: 0, envMapIntensity: 0.6 });
+  const rig = el.dataset.rig && grp ? JSON.parse(el.dataset.rig) : null;
+  if (rig) setupRig(el, geo, grp, n, rig, root, mat); else root.add(new THREE.Mesh(geo, mat));
+  scene.add(root);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 1.6;

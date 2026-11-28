@@ -671,3 +671,7 @@ main .contact-card, main .contact-card *, main h2, main .btn, main .tags li, mai
 
 /* Keep tall photos inside the 4:3 project viewer, centred */
 html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; object-fit: cover; }
+
+/* Slider under a 3D model with moving parts (the claw). */
+.model3d-slider { display: flex; align-items: center; gap: .75rem; margin: .7rem 0 0; font-size: .9rem; }
+.model3d-slider input { flex: 1; accent-color: #ee8cff; }
