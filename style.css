@@ -721,3 +721,5 @@ html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; o
 }
 @media (prefers-reduced-motion: reduce) { .project-dialog.anim-in .dlg-side { animation-duration: .01ms; animation-delay: 0s; } }
 .model3d-slider .model3d-play { padding: .35rem .85rem; font-size: .85rem; white-space: nowrap; margin-left: .25rem; }
+.model3d-slider.button-only { justify-content: flex-start; }
+.model3d-slider.button-only .model3d-play { margin-left: 0; }

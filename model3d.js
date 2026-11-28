@@ -48,7 +48,7 @@ async function load(url) {
 // the frame and side links rise relative to it.
 function setupRig(el, geo, grp, n, rig, root, mat) {
   const parts = [];
-  for (let g = 0; g < 8; g++) {
+  for (let g = 0; g < 16; g++) {
     const tris = [];
     for (let t = 0; t < n; t++) if (grp[t] === g) tris.push(t);
     if (!tris.length) continue;
@@ -111,13 +111,15 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
   bar.innerHTML = '<span></span><input type="range" min="0" max="1" step="0.005" value="0"><span></span><button type="button" class="btn model3d-play"></button>';
   const [loEl, input, hiEl, play] = bar.children;
   loEl.textContent = lo; hiEl.textContent = hi;
+  // rig.slider: false shows just the button.
+  if (rig.slider === false) { loEl.remove(); hiEl.remove(); input.hidden = true; bar.classList.add('button-only'); }
   input.setAttribute('aria-label', rig.aria || 'Open or close the claw');
   const sync = () => { play.textContent = +input.value < 0.5 ? toHi : toLo; };
   let anim = 0;
   input.addEventListener('input', () => { cancelAnimationFrame(anim); pose(+input.value); sync(); });
   play.addEventListener('click', () => {
     cancelAnimationFrame(anim);
-    const from = +input.value, to = from < 0.5 ? 1 : 0, dur = (rig.explode ? 2600 : 1400) * Math.abs(to - from), t0 = performance.now();
+    const from = +input.value, to = from < 0.5 ? 1 : 0, dur = (rig.duration || 1400) * Math.abs(to - from), t0 = performance.now();
     const step = now => {
       const k = dur ? Math.min(1, (now - t0) / dur) : 1;
       input.value = from + (to - from) * k; pose(+input.value);
