@@ -677,7 +677,7 @@ html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; o
 .model3d-slider input { flex: 1; accent-color: #ee8cff; }
 
 /* Project case studies (main projects): at-a-glance facts, timeline, diagram slots, specs, challenges. */
-.cs-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 16px 0 0; }
+.cs-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 16px 0 0; }
 .cs-facts > div { background: rgba(26, 0, 150, .55); padding: 10px 12px; }
 .cs-facts dt { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 4px; }
 .cs-facts dd { margin: 0; font-size: .92rem; }
@@ -687,7 +687,7 @@ html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; o
 .cs-timeline li:last-child { margin-bottom: 0; }
 .cs-timeline li::before { content: ""; position: absolute; left: -27px; top: .2em; width: 8px; height: 8px; background: #fff; border: 2px solid var(--blue); outline: 2px solid #fff; }
 .cs-timeline time { display: block; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: #fff; }
-.cs-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 8px; }
+.cs-figs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px; }
 .cs-fig { margin: 0; }
 .cs-fig-box { aspect-ratio: 4 / 3; border: 2px dashed var(--line); display: grid; place-items: center; text-align: center; color: var(--ink-soft); font-size: .8rem; background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .04) 0 10px, transparent 10px 20px); }
 .cs-fig-box svg { width: 34px; height: 34px; display: block; margin: 0 auto 6px; opacity: .85; }
@@ -699,4 +699,6 @@ html body .project-dialog .dlg-main > img { aspect-ratio: 4 / 3; height: auto; o
 .cs-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .cs-pair > div { background: rgba(26, 0, 150, .55); padding: 10px 12px; }
 .cs-pair b { display: block; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; color: #fff; }
-@media (max-width: 560px) { .cs-pair { grid-template-columns: 1fr; } }
+.cs-fig:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.cs-fig:last-child:nth-child(odd) .cs-fig-box { aspect-ratio: 16 / 6; }
+@media (max-width: 560px) { .cs-pair, .cs-figs { grid-template-columns: 1fr; } .cs-fig:last-child:nth-child(odd) .cs-fig-box { aspect-ratio: 4 / 3; } }
