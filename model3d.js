@@ -35,7 +35,12 @@ async function load(url) {
   return decode(await new Response(stream).arrayBuffer());
 }
 
-// Moving parts. Each triangle belongs to a part: 0 fixed, 1 the sliding carriage, 2-4 the three finger
+// Moving parts. Each triangle belongs to a part (one byte per triangle after the colors), and data-rig
+// says how the parts move as the slider under the viewer goes from 0 to 1. Two kinds:
+// - Exploded view (the headphones): data-rig.explode gives each part [dx, dy, dz, t0, t1]; the part slides
+//   out by that much during its own stretch [t0, t1] of the slider, so the parts come apart one after
+//   another in the order you'd take it apart, and go back together in reverse.
+// - Linkage (the claw): parts 0 fixed, 1 the sliding carriage, 2-4 the three finger
 // arms, 5-7 the three side links. data-rig holds where the joints are (in model units, around the
 // center axis O) and a table of [arm angle in degrees, carriage drop, link angle in degrees] from open to
 // closed, worked out from the linkage in the CAD model. A slider under the viewer drives it.
@@ -57,9 +62,9 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
     m.matrixAutoUpdate = false; m.frustumCulled = false;
     root.add(m); parts.push([g, m]);
   }
-  const rad = Math.PI / 180, tab = rig.table;
+  const rad = Math.PI / 180, tab = rig.table || [];
   const T = new THREE.Matrix4(), R = new THREE.Matrix4(), B = new THREE.Matrix4(), lift = new THREE.Matrix4(), axis = new THREE.Vector3();
-  const pose = s => {
+  const linkage = s => {
     const x = s * (tab.length - 1), i = Math.min(tab.length - 2, Math.floor(x)), w = x - i;
     const [th, d, ph] = [0, 1, 2].map(j => tab[i][j] * (1 - w) + tab[i + 1][j] * w);
     lift.makeTranslation(0, 0, -d);
@@ -79,13 +84,45 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
       m.matrixWorldNeedsUpdate = true;
     }
   };
+  const explode = s => {
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const [sx, sy, sz] = rig.shift || [0, 0, 0];
+    for (const [g, m] of parts) {
+      const [dx = 0, dy = 0, dz = 0, t0 = 0, t1 = 1] = rig.explode[g] || [];
+      const k = ease((s - t0) / ((t1 - t0) || 1));
+      // shift keeps the whole set centred in the view as it spreads out
+      m.matrix.makeTranslation(dx * k + sx * s, dy * k + sy * s, dz * k + sz * s);
+      m.matrixWorldNeedsUpdate = true;
+    }
+  };
+  const pose = rig.explode ? explode : linkage;
   pose(0);
-  const label = document.createElement('label');
-  label.className = 'model3d-slider';
-  label.innerHTML = '<span>Open</span><input type="range" min="0" max="1" step="0.005" value="0" aria-label="Open or close the claw"><span>Closed</span>';
-  const input = label.querySelector('input');
-  input.addEventListener('input', () => pose(+input.value));
-  el.after(label);
+
+  // Slider plus a button that plays the motion to the other end.
+  const [lo, hi] = rig.labels || ['Open', 'Closed'];
+  const [toHi, toLo] = rig.actions || ['Close', 'Open'];
+  const bar = document.createElement('div');
+  bar.className = 'model3d-slider';
+  bar.innerHTML = '<span></span><input type="range" min="0" max="1" step="0.005" value="0"><span></span><button type="button" class="btn model3d-play"></button>';
+  const [loEl, input, hiEl, play] = bar.children;
+  loEl.textContent = lo; hiEl.textContent = hi;
+  input.setAttribute('aria-label', rig.aria || 'Open or close the claw');
+  const sync = () => { play.textContent = +input.value < 0.5 ? toHi : toLo; };
+  let anim = 0;
+  input.addEventListener('input', () => { cancelAnimationFrame(anim); pose(+input.value); sync(); });
+  play.addEventListener('click', () => {
+    cancelAnimationFrame(anim);
+    const from = +input.value, to = from < 0.5 ? 1 : 0, dur = (rig.explode ? 2600 : 1400) * Math.abs(to - from), t0 = performance.now();
+    const step = now => {
+      const k = dur ? Math.min(1, (now - t0) / dur) : 1;
+      input.value = from + (to - from) * k; pose(+input.value);
+      if (k < 1) anim = requestAnimationFrame(step); else sync();
+    };
+    play.textContent = to ? toLo : toHi;
+    anim = requestAnimationFrame(step);
+  });
+  sync();
+  el.after(bar);
 }
 
 function mount(el) {
