@@ -39,6 +39,8 @@ async function load(url) {
 // arms, 5-7 the three side links. data-rig holds where the joints are (in model units, around the
 // center axis O) and a table of [arm angle in degrees, carriage drop, link angle in degrees] from open to
 // closed, worked out from the linkage in the CAD model. A slider under the viewer drives it.
+// The bottom triangle (and the carriage and guide rods it's joined to) stays still; as the claw closes,
+// the frame and side links rise relative to it.
 function setupRig(el, geo, grp, n, rig, root, mat) {
   const parts = [];
   for (let g = 0; g < 8; g++) {
@@ -56,10 +58,11 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
     root.add(m); parts.push([g, m]);
   }
   const rad = Math.PI / 180, tab = rig.table;
-  const T = new THREE.Matrix4(), R = new THREE.Matrix4(), B = new THREE.Matrix4(), axis = new THREE.Vector3();
+  const T = new THREE.Matrix4(), R = new THREE.Matrix4(), B = new THREE.Matrix4(), lift = new THREE.Matrix4(), axis = new THREE.Vector3();
   const pose = s => {
     const x = s * (tab.length - 1), i = Math.min(tab.length - 2, Math.floor(x)), w = x - i;
     const [th, d, ph] = [0, 1, 2].map(j => tab[i][j] * (1 - w) + tab[i + 1][j] * w);
+    lift.makeTranslation(0, 0, -d);
     for (const [g, m] of parts) {
       if (g === 0) m.matrix.identity();
       else if (g === 1) m.matrix.makeTranslation(0, 0, d);
@@ -72,6 +75,7 @@ function setupRig(el, geo, grp, n, rig, root, mat) {
         T.makeTranslation(px, py, pz + (arm ? d : 0)); B.makeTranslation(-px, -py, -pz);
         m.matrix.multiplyMatrices(T, R).multiply(B);
       }
+      m.matrix.premultiply(lift);
       m.matrixWorldNeedsUpdate = true;
     }
   };
